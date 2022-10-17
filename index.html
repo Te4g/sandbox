@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
           integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
           crossorigin=""/>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.31.0/dist/full.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
-            integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
-            crossorigin=""></script>
+            integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
     <style>
         #map {
             width: 500px;
@@ -19,47 +20,64 @@
         }
     </style>
 </head>
-<body>
-<button onclick="getPosition()">
-    get position
-</button>
+<body class="px-2">
+<div id="app" class="py-2">
+    <button class="btn btn-primary" @click="getPosition">
+        get position
+    </button>
+    <p>{{ latitude }}</p>
+    <p>{{ longitude }}</p>
+    <div v-if="speed !== null && !isNaN(speed)">
+        <p>{{ speed }} m/s</p>
+        <p>{{ speed * 3.6}} km/h</p>
+    </div>
+    <div id="map"></div>
+</div>
 
-<p id="latitude"></p>
-<p id="longitude"></p>
-<p id="speed"></p>
-<div id="map"></div>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script>
-    let lat = document.querySelector('#latitude')
-    let long = document.querySelector('#longitude')
-    let speed = document.querySelector('#speed')
+    const { createApp } = Vue
 
-    function getPosition() {
-        navigator.geolocation.getCurrentPosition((position) => {
-                console.log('coucou')
-                lat.textContent = `lat: ${position.coords.latitude}` || 'unknown latitude'
-                long.textContent = `long: ${position.coords.longitude}` || 'unknown longitude'
-                speed.textContent = `speed: ${position.coords.speed || 'unknown speed'}`
-                handleMap(position.coords.latitude, position.coords.longitude)
-            }, () => {
-                console.log('error')
+    createApp({
+        data() {
+            return {
+                latitude: null,
+                longitude: null,
+                speed: null
+            }
+        },
+        created() {
+            this.getPosition()
+        },
+        methods: {
+            getPosition() {
+                navigator.geolocation.watchPosition((position) => {
+                        console.log('coucou')
+                        this.latitude = `lat: ${position.coords.latitude}` || 'unknown latitude'
+                        this.longitude = `long: ${position.coords.longitude}` || 'unknown longitude'
+                        this.speed = `speed: ${position.coords.speed || 'unknown speed'}`
+                        this.handleMap(position.coords.latitude, position.coords.longitude)
+                    }, () => {
+                        console.log('error')
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 1000,
+                        timeout: 30000
+                    })
             },
-            {
-                enableHighAccuracy: true,
-                maximumAge: 1000,
-                timeout: 30000
-            })
-    }
+            handleMap (lat, long) {
+                var map = L.map('map').setView([lat, long], 13);
 
-    function handleMap(lat, long) {
-        var map = L.map('map').setView([lat, long], 13);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-
-        L.marker([lat,long]).addTo(map)
-    }
+                L.marker([lat, long]).addTo(map)
+            }
+        }
+    }).mount('#app')
 </script>
 </body>
 </html>
