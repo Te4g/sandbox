@@ -27,8 +27,8 @@
     </button>
     <p>{{ latitude }}</p>
     <p>{{ longitude }}</p>
-    <p>{{ speed }} m/s</p>
-    <p>{{ parseInt(speed) * 3.6 }} km/h</p>
+    <p>{{ getSpeed('m/s') }} m/s</p>
+    <p>{{ getSpeed('km/h') }} km/h</p>
     <div id="map"></div>
 </div>
 
@@ -48,12 +48,19 @@
             this.getPosition()
         },
         methods: {
+            getSpeed(format) {
+                switch (format) {
+                    case 'm/s': return this.speed
+                    case 'km/h': return this.speed * 3.6
+                    default: return 0
+                }
+            },
             getPosition() {
                 navigator.geolocation.watchPosition((position) => {
                         console.log('coucou')
                         this.latitude = `lat: ${position.coords.latitude}` || 'unknown latitude'
                         this.longitude = `long: ${position.coords.longitude}` || 'unknown longitude'
-                        this.speed = `speed: ${position.coords.speed || 'unknown speed'}`
+                        this.speed = position.coords.speed
                         this.handleMap(position.coords.latitude, position.coords.longitude)
                     }, () => {
                         console.log('error')
