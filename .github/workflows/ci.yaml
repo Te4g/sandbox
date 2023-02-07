@@ -10,22 +10,22 @@ env:
   DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
   DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
   DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+  DEPLOY_DESTINATION: /srv/www/${{ github.event.repository.name }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup rsync
+      - name: Create destination directory
         run: |
-          sudo apt-get install rsync
+          mkdir -p $DEPLOY_DESTINATION
       - name: Deploy with rsync
         run: |
           mkdir -p ~/.ssh
           echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no -p $DEPLOY_PORT" ./ $DEPLOY_USER@$DEPLOY_HOST:/srv/www/${{ github.event.repository.name }}
-
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no -p $DEPLOY_PORT" ./ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_DESTINATION
       - name: Build containers
         run: |
-          ssh -o StrictHostKeyChecking=no -p $DEPLOY_PORT $DEPLOY_USER@$DEPLOY_HOST "cd /srv/www/${{ github.event.repository.name }} && make build@prod"
+          ssh -o StrictHostKeyChecking=no -p $DEPLOY_PORT $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_DESTINATION && make build@prod"
