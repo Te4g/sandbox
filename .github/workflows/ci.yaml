@@ -10,7 +10,7 @@ env:
   DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
   DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
   DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-  DEPLOY_DESTINATION: /srv/www/${{ github.event.repository.name }}
+  DEPLOY_DESTINATION: "/srv/www/${{ github.event.repository.name }}"
 
 jobs:
   deploy:
