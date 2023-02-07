@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Canvas</title>
+    <style>
+        body {
+            margin: 10px;
+        }
+        canvas {
+            margin: 0 auto;
+            border: 1px solid #000;
+        }
+        #canvas-container {
+            width: 500px;
+            height: 500px;
+            position: relative;
+        }
+        #canvas {
+            position: absolute;
+            z-index: 1;
+        }
+        #canvas2 {
+            position: absolute;
+            z-index: 2;
+        }
+        #canvas3 {
+            right: 0;
+            position: fixed;
+        }
+    </style>
+</head>
+<body>
+    <video id="video" loop></video>
+    <video id="img" src="https://media.giphy.com/media/X6HX1TOsBf56R9LrFF/giphy-downsized-large.gif"></video>
+    <div id="canvas-container">
+        <canvas id="canvas" width="500" height="500"></canvas>
+        <canvas id="canvas2" width="500" height="500"></canvas>
+        <canvas id="canvas3" width="300" height="300"></canvas>
+    </div>
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100" height="100" fill="blue">
+            <animate attributeName="rx" values="0;50;0" dur="2s" repeatCount="indefinite" />
+        </rect>
+    </svg>
+    <img id="lol" src="" alt="img">
+
+    <button onClick="addSvgToCanvas()">Add svg to canvas</button>
+    <button onClick="changeSvgColor()">Change svg color</button>
+    <button onClick="downloadCanvasImage()">download</button>
+    <button onClick="insertGifIntoCanvas()">insert gif</button>
+    <button onClick="insertVideoIntoCanvas()">insert video</button>
+    <button onClick="addImgToCanvas()">insert img</button>
+    <button onClick="sendToWebSocket()" style="background: bisque">send websocket</button>
+    <button onClick="stopRecorder()" style="background: red">stop recorder</button>
+<script>
+    let canvas = document.getElementById('canvas');
+    let canvas2 = document.getElementById('canvas2');
+    let canvas3 = document.getElementById('canvas3');
+    let ctx = canvas.getContext('2d');
+    let ctx2 = canvas2.getContext('2d');
+    let ctx3= canvas3.getContext('2d');
+    let video = document.getElementById('video');
+    let svg = document.querySelector('svg');
+    let img = document.getElementById('img');
+    let recorder = new MediaRecorder(canvas.captureStream(25));
+    let ws = new WebSocket('ws://localhost:8099/ws');
+
+    function addSvgToCanvas() {
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const DOMURL = window.URL || window.webkitURL || window;
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+        const url = DOMURL.createObjectURL(svgBlob);
+        img.onload = function() {
+            ctx2.drawImage(img, 0, 0);
+            DOMURL.revokeObjectURL(url);
+        }
+        img.src = url;
+    }
+
+    function changeSvgColor() {
+        let colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'pink', 'brown', 'grey', 'black']
+        svg.querySelector('rect').setAttribute('fill', colors[Math.floor(Math.random() * colors.length)]);
+    }
+
+    function downloadCanvasImage() {
+        const link = document.createElement('a');
+        link.download = 'download.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        link.delete();
+    }
+
+    function insertGifIntoCanvas() {
+        var img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = function() {
+            ctx.drawImage(img, 0, 0);
+        }
+        img.src = 'https://media.giphy.com/media/X6HX1TOsBf56R9LrFF/giphy-downsized-large.gif';
+    }
+
+    function insertVideoIntoCanvas() {
+        video.src = 'https://s1.ngtvexperience.com/0001/foot.mp4';
+        video.crossOrigin = "Anonymous";
+        video.onloadeddata = function() {
+            video.play();
+            console.log('video loaded')
+            updateCanvas()
+        }
+    }
+
+    function updateCanvas() {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.width * (video.videoHeight / video.videoWidth));
+        addSvgToCanvas()
+        window.requestAnimationFrame(updateCanvas);
+    }
+
+    function addImgToCanvas() {
+        img.play();
+        ctx.drawImage(img, 0, 0);
+
+        window.requestAnimationFrame(addImgToCanvas);
+    }
+
+    // send canvas to websocket
+    function sendToWebSocket() {
+        recorder.start()
+        console.log(recorder)
+        recorder.ondataavailable = function(e) {
+            ws.send(e.data);
+        }
+        setInterval(() => {
+            recorder.requestData();
+        }, 1000);
+    }
+
+    // stop recorder
+    function stopRecorder() {
+        recorder.stop();
+    }
+
+    // receive data from websocket binary to video element
+    ws.onmessage = function(e) {
+        console.log(e)
+        var blob = new Blob([e.data], {type: 'image/png'});
+        var url = URL.createObjectURL(blob);
+        let img = new Image();
+        img.onload = function() {
+            console.log('image loaded')
+            ctx3.drawImage(img, 0, 0);
+            DOMURL.revokeObjectURL(url);
+        }
+        img.src = url;
+        let lol = document.getElementById('lol');
+        lol.src = url;
+    }
+</script>
+</body>
+</html>
+
