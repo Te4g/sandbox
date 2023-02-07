@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            margin: 10px;
+            display: flex;
+        }
+        video {
+            margin: 10px;
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" style="justify-content: space-around;">
+    <div>
+        <label for="delay">Delay (seconds)</label>
+        <input type="number" min="1" max="100" value="5" step="1" id="delay" name="delay">
+    </div>
+    <div>
+        <button id="start" onclick="start()">Start</button>
+        <button id="stop" onclick="stop()" hidden>Stop</button>
+    </div>
+</div>
+<div id="video-container" class="container" style="flex-direction: column; align-items: center">
+    <video id="video"></video>
+</div>
+
+<script>
+    const videos = []
+    const hide = el => el.style.display = 'none'
+    const show = el => el.style.display = 'block'
+    const delayInput = document.getElementById('delay')
+    delayInput.addEventListener('change', (e) => {
+        delay = parseInt(e.target.value)
+    })
+
+    let delay = 5
+    let buttonStart = document.getElementById('start')
+    let buttonStop = document.getElementById('stop')
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream
+            video.onloadedmetadata = () => video.play()
+        })
+        .catch(console.error)
+
+    function start() {
+        show(buttonStop)
+        hide(buttonStart)
+
+        const showAndHideOthers = ({ target }) => {
+            window.requestAnimationFrame(() => {
+                videos.forEach(hide)
+                show(target)
+            })
+        }
+
+        const initRecorder = stream => {
+            const recorder = new MediaRecorder(stream)
+            const video = document.createElement('video')
+            video.className = 'videoCreated'
+
+            const restart = ({ data }) => {
+                video.src = URL.createObjectURL(data)
+                recorder.start()
+            }
+
+            video.autoplay = true
+            videos.push(video)
+            video.addEventListener('play', showAndHideOthers)
+            document.querySelector('#video-container').appendChild(video)
+
+            recorder.addEventListener('dataavailable', restart)
+            recorder.start()
+            setInterval(recorder.stop.bind(recorder), delay * 1000)
+        }
+        initRecorder(video.srcObject)
+        setTimeout(initRecorder, delay * 1000 / 2, video.srcObject)
+    }
+
+    function stop() {
+        window.location.reload()
+    }
+</script>
+</body>
+</html>
