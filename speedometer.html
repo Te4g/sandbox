@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<style>
+    #speedometer {
+        position: relative;
+        border: solid;
+        height: 400px;
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 200px;
+        border-radius: 50%;
+        border-left: none;
+        border-bottom: none;
+        border-right: none;
+    }
+    .speedMarker {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        height: 50%;
+        transform-origin: bottom left;
+    }
+    #needle {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        height: 50%;
+        width: 2px;
+        background-color: red;
+        transform-origin: bottom;
+    }
+</style>
+
+<label for="speed">
+    Speed:
+    <input id="speed" type="number" min="0" max="300">
+</label>
+
+<div id="speedometer"></div>
+
+<script>
+let speedometer = document.querySelector('#speedometer');
+let speed = document.querySelector('#speed')
+speed.addEventListener('input', () => {
+    let speedValue = speed.value
+    let angle = -90 + (speedValue * 180 / 300)
+    needle.style.transform = `rotate(${angle}deg)`
+})
+
+for (let speed = 0, maxSpeed = 300, step = 50, i = 0; speed <= maxSpeed; speed += step, i++) {
+    let numberOfSteps = maxSpeed / step
+    let angleByStep = 180 / numberOfSteps
+    let currentAngle = angleByStep * i
+
+    let divSpeed = document.createElement('div')
+    divSpeed.className = 'speedMarker'
+    divSpeed.innerText = speed.toString()
+    divSpeed.style.transform = `rotate(${currentAngle - 90}deg)`
+
+    speedometer.append(divSpeed)
+}
+
+let needle = document.createElement('div')
+needle.id = 'needle';
+needle.style.transform = `rotate(-90deg)`;
+
+speedometer.append(needle)
+
+</script>
+
+</body>
+</html>
