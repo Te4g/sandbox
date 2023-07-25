@@ -129,7 +129,7 @@
             createSpeedometer() {
                 let speedometer = document.querySelector('#speedometer');
                 speedInterval = setInterval(() => {
-                    let speedValue = this.speed
+                    let speedValue = this.speed * 3.6
                     let angle = -90 + (speedValue * 180 / 300)
                     needle.style.transform = `rotate(${angle}deg)`
                 }, 1000)
