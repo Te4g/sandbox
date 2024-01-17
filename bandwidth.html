@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+
+    <title>Bandwidth</title>
+</head>
+<body>
+<main class="container">
+    <h1>Bandwidth calculator</h1>
+
+    <label for="fields-number">Number of fields</label>
+    <input type="number" min="0" name="fields-number" id="fields-number" value="1">
+
+    <label for="hours-video-per-field">Hours of video per field</label>
+    <input type="number" min="0" name="hours-video-per-field" id="hours-video-per-field" value="4">
+
+    <label for="clips-per-hour">Number of 30 seconds video clip per hour of game</label>
+    <input type="number" min="0" name="clips-per-hour" id="clips-per-hour" value="25">
+
+    <label for="clips-duration">Duration of a clip in seconds</label>
+    <input type="number" min="0"  max="60" name="clips-duration" id="clips-duration" value="30">
+
+    <label for="video-bitrate">Video bitrate (min 2048kb/s for 720p and min 4096kbs for 1080p)</label>
+    <select name="video-bitrate" id="video-bitrate">
+        <option value="2048" selected>2048 kbps</option>
+        <option value="4096">4096 kbps</option>
+        <option value="6144">6144 kbps</option>
+        <option value="8192">8192 kbps</option>
+    </select>
+
+    <label for="export-duration-max">Max duration in hours accepted to export Videos (not clips, they are exported on the go)</label>
+    <input type="number" name="export-duration-max" id="export-duration-max" min="1" max="24" value="8">
+
+    <div id="result" style="margin-top: 30px">
+        <h2>Results:</h2>
+    </div>
+</main>
+
+<script>
+    const fieldsNumber = document.getElementById('fields-number');
+    const hoursVideoPerField = document.getElementById('hours-video-per-field');
+    const clipsPerHour = document.getElementById('clips-per-hour');
+    const clipsDuration = document.getElementById('clips-duration');
+    const videoBitrate = document.getElementById('video-bitrate');
+    const exportDurationMax = document.getElementById('export-duration-max');
+
+    const resultContainer = document.getElementById('result');
+
+    const videoBandwidth = document.createElement('p');
+    videoBandwidth.id = 'videoBandwidth';
+    resultContainer.appendChild(videoBandwidth);
+
+    const videoClipBandwidth = document.createElement('p');
+    videoClipBandwidth.id = 'videoClipBandwidth';
+    resultContainer.appendChild(videoClipBandwidth);
+
+    function getVideoVolumetryInMbits() {
+        const volumetry =  (fieldsNumber.value * hoursVideoPerField.value * videoBitrate.value * 3600) / 1024;
+        console.log(`Video volumetry: ${volumetry} Mbits`);
+        return volumetry;
+    }
+
+    function getVideoClipVolumetryInMbits() {
+        const volumetry =  fieldsNumber.value * clipsPerHour.value * videoBitrate.value * clipsDuration.value / 1024;
+        console.log(`Video clips volumetry: ${volumetry} Mbits`);
+        return volumetry;
+    }
+
+    const calculateBandwidth = () => {
+        const videoBandwidthValue = getVideoVolumetryInMbits() / (exportDurationMax.value * 3600);
+        videoBandwidth.innerHTML = `<strong>Bandwidth</strong>:<br> ${videoBandwidthValue.toFixed(2)} Mbps`;
+
+        const videoClipBandwidthValue = getVideoClipVolumetryInMbits() / 3600;
+        videoClipBandwidth.innerHTML = `<strong>Bandwidth for clips</strong>:<br> ${videoClipBandwidthValue.toFixed(2)} Mbps (supposing clips MUST be exported within the hour)`;
+    }
+
+    calculateBandwidth()
+
+    fieldsNumber.addEventListener('change', calculateBandwidth);
+    hoursVideoPerField.addEventListener('change', calculateBandwidth);
+    clipsPerHour.addEventListener('change', calculateBandwidth);
+    clipsDuration.addEventListener('change', calculateBandwidth);
+    videoBitrate.addEventListener('change', calculateBandwidth);
+    exportDurationMax.addEventListener('change', calculateBandwidth);
+</script>
+</body>
+</html>
