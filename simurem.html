@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>Simurem</title>
+</head>
+<body>
+<div class="container">
+    <h1>Rem calculator</h1>
+    <label for="holidays-week-number">Holidays week number</label>
+    <input type="number" id="holidays-week-number" name="holidays-week-number" min="0" max="52" value="5">
+
+    <label for="gross-hourly-rate">Gross hourly rate</label>
+    <input type="number" min="0" id="gross-hourly-rate" name="gross-hourly-rate" value="40">
+
+    <label for="working-hours-per-week">Working hours per week</label>
+    <input type="number" min="0" id="working-hours-per-week" name="working-hours-per-week" value="35">
+
+    <div id="result" style="margin-top: 30px">
+        <h2>Results:</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Periodicity</th>
+                <th>Annual</th>
+                <th>Monthly</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Gross turnover</th>
+                <td id="gross-annual-turnover"></td>
+                <td id="gross-monthly-turnover"></td>
+            </tr>
+            <tr>
+                <td>Turnover after BNC tax</td>
+                <td id="annual-turnover-after-bnc-tax"></td>
+                <td id="monthly-turnover-after-bnc-tax"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    'use strict';
+
+    let holidaysWeekNumber = document.getElementById('holidays-week-number');
+    let grossHourlyRate = document.getElementById('gross-hourly-rate');
+    let workingHoursPerWeek = document.getElementById('working-hours-per-week');
+    let grossAnnualTurnover = document.getElementById('gross-annual-turnover');
+    let grossMonthlyTurnover = document.getElementById('gross-monthly-turnover');
+    let annualTurnoverAfterBNCTax = document.getElementById('annual-turnover-after-bnc-tax');
+    let monthlyTurnoverAfterBNCTax = document.getElementById('monthly-turnover-after-bnc-tax');
+
+    holidaysWeekNumber.addEventListener('change', function () {
+        calculateIncome();
+    });
+    grossHourlyRate.addEventListener('change', function () {
+        calculateIncome();
+    });
+    workingHoursPerWeek.addEventListener('change', function () {
+        calculateIncome();
+    });
+
+    let BNCTax = 0.211;
+    let CFETax = 0.02;
+
+    function calculateIncome() {
+        let grossAnnualIncome = grossHourlyRate.value * workingHoursPerWeek.value * (52 - holidaysWeekNumber.value);
+        let annualIncomeAfterBNCTax = grossAnnualIncome * (1 - BNCTax + CFETax);
+        let monthlyIncome = grossAnnualIncome / 12;
+        let monthlyIncomeAfterBNCTax = annualIncomeAfterBNCTax / 12;
+
+        grossAnnualTurnover.innerText = grossAnnualIncome.toFixed(2);
+        grossMonthlyTurnover.innerText = monthlyIncome.toFixed(2);
+        annualTurnoverAfterBNCTax.innerText = annualIncomeAfterBNCTax.toFixed(2);
+        monthlyTurnoverAfterBNCTax.innerText = monthlyIncomeAfterBNCTax.toFixed(2);
+    }
+
+    calculateIncome()
+
+</script>
+</body>
+</html>
