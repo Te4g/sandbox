@@ -55,6 +55,7 @@
 <button id="prev">Previous</button>
 <button id="next">Next</button>
 <button id="go">Go</button>
+<p id="current-page"></p>
 <div id="camera-display"></div>
 <div id="myModal" class="modal">
     <span class="close">&times;</span>
@@ -2794,6 +2795,10 @@
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         const paginatedItems = cameras.slice(start, end);
+
+        const maxPage = Math.ceil(cameras.length / itemsPerPage);
+
+        document.getElementById('current-page').textContent = "Current Page: " + currentPage + " / " + maxPage;
 
         // Clear the display
         const display = document.getElementById('camera-display');
