@@ -55,7 +55,10 @@
 <button id="prev">Previous</button>
 <button id="next">Next</button>
 <button id="go">Go</button>
-<p id="current-page"></p>
+<div style="display: flex">
+    <p id="current-page" style="margin-right: 20px"></p>
+    <p id="cameras-number-total"></p>
+</div>
 <div id="camera-display"></div>
 <div id="myModal" class="modal">
     <span class="close">&times;</span>
@@ -2799,6 +2802,7 @@
         const maxPage = Math.ceil(cameras.length / itemsPerPage);
 
         document.getElementById('current-page').textContent = "Current Page: " + currentPage + " / " + maxPage;
+        document.getElementById('cameras-number-total').textContent = "Total Cameras: " + cameras.length;
 
         // Clear the display
         const display = document.getElementById('camera-display');
