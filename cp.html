@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+
+    <title>CP Calculator</title>
+</head>
+<body>
+<main class="container">
+    <h1>CP calculator</h1>
+
+    <label for="gross-monthly-salary">Gross Monthly Salary</label>
+    <input type="number" min="0" id="gross-monthly-salary" value="2000">
+
+    <label for="reference-salary">Reference Salary</label>
+    <input type="number" min="0" id="reference-salary" value="24000">
+
+    <label for="hours-per-week">Hours Worked Per Week</label>
+    <input type="number" min="0" id="hours-per-week" value="35">
+
+    <label for="hours-per-day">Hours Worked Per Day</label>
+    <input type="number" min="0" id="hours-per-day" value="7">
+
+    <label for="vacation-days">Vacation Days</label>
+    <input type="number" min="0" id="vacation-days" value="5">
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="result" style="margin-top: 30px">
+        <h2>Results:</h2>
+        <p id="result-text"></p>
+    </div>
+</main>
+
+<script>
+    function calculate() {
+        const grossMonthlySalary = document.getElementById('gross-monthly-salary').value;
+        const referenceSalary = document.getElementById('reference-salary').value;
+        const hoursPerWeek = document.getElementById('hours-per-week').value;
+        const hoursPerDay = document.getElementById('hours-per-day').value;
+        const vacationDays = document.getElementById('vacation-days').value;
+
+        const tenthMethod = (referenceSalary / 10) / 30 * vacationDays;
+        const maintainSalaryMethod = grossMonthlySalary * (hoursPerDay * vacationDays) / (hoursPerDay * 25);
+
+        const result = Math.max(tenthMethod, maintainSalaryMethod);
+
+        document.getElementById('result-text').textContent = 'The most advantageous amount for the employee is: ' + result.toFixed(2) + ' €';
+    }
+</script>
+</body>
+</html>
