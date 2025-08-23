@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tailwind V4 Theme Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .color-input {
+            -webkit-appearance: none;
+            border: none;
+            width: 60px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .color-input::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .color-input::-webkit-color-swatch {
+            border: none;
+            border-radius: 8px;
+        }
+
+        .palette-item {
+            transition: transform 0.2s ease;
+        }
+
+        .palette-item:hover {
+            transform: scale(1.05);
+        }
+    </style>
+    <style id="live-theme-vars"></style>
+</head>
+<body class="bg-gray-50 min-h-screen py-8">
+<div class="max-w-7xl mx-auto px-4">
+    <header class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">Tailwind V4 Theme Generator</h1>
+        <p class="text-gray-600">Create custom color themes for your Tailwind CSS v4 project</p>
+    </header>
+
+    <section class="mb-8">
+        <div class="rounded-lg border p-6
+                    bg-[--color-background] text-[--color-content] border-[--color-border] relative">
+            <h2 class="text-2xl font-semibold mb-2">Live Theme Demo</h2>
+            <div class="rounded-full absolute top-2 right-2 w-32 border text-center p-1"
+                 onclick="(function(){const r=document.documentElement;const isDark=r.getAttribute('data-theme')==='dark';if(isDark){r.removeAttribute('data-theme');localStorage.setItem('theme','light');r.style.colorScheme='light';}else{r.setAttribute('data-theme','dark');localStorage.setItem('theme','dark');r.style.colorScheme='dark';}})()"
+            >
+                Dark mode
+            </div>
+            <p class="text-sm mb-4 text-[--color-muted-content]">
+                This section previews semantic tokens: background, foreground, muted, card, border, ring, and on-color
+                text.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Text + Buttons -->
+                <div>
+                    <h3 class="font-semibold mb-2">Buttons</h3>
+                    <div class="flex items-center gap-3">
+                        <button class="px-4 py-2 rounded
+                           bg-[--color-primary] text-[--color-primary-content]
+                           hover:bg-[--color-primary-700]
+                           focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
+                            Primary
+                        </button>
+                        <button class="px-4 py-2 rounded border
+                                       bg-[--color-secondary] text-[--color-secondary-content] border-[--color-input]
+                                       hover:bg-[--color-muted]
+                                       focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
+                            Secondary
+                        </button>
+                        <span class="text-xs px-2 py-1 rounded
+                                     bg-[--color-primary-100] text-[--color-primary-700] border border-[--color-primary-200]">
+                            Subtle badge
+                        </span>
+                    </div>
+
+                    <h3 class="font-semibold mt-6 mb-2">Typography</h3>
+                    <p class="mb-1">
+                        Body text uses text-[--color-content]. This should remain readable in light and dark.
+                    </p>
+                    <p class="text-sm text-[--color-muted-content]">
+                        Muted text uses text-[--color-muted-content] for lower emphasis.
+                    </p>
+                </div>
+
+                <!-- Card + Input + Alert -->
+                <div class="space-y-4">
+                    <div class="rounded border p-4 bg-[--color-card] text-[--color-card-content] border-[--color-border]">
+                        <h4 class="font-semibold mb-1">Card title</h4>
+                        <p class="text-sm text-[--color-muted-content] mb-3">Card uses bg-[--color-card] and
+                            text-[--color-card-content].</p>
+                        <input
+                                class="w-full rounded px-3 py-2 bg-[--color-background] text-[--color-content]
+                                   border border-[--color-input]
+                                   focus:outline-none focus:ring-2 focus:ring-[--color-ring]"
+                                placeholder="Input using border-[--color-input]"/>
+                    </div>
+
+                    <div class="rounded border p-4 border-[--color-success-200] bg-[--color-success-100]">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="inline-block px-2 py-0.5 rounded
+                                         bg-[--color-success-600] text-[--color-success-content]">
+                                Success
+                            </span>
+                            <span class="text-sm font-medium text-[--color-success-700]">Action complete</span>
+                        </div>
+                        <p class="text-sm text-[--color-success-700]">
+                            This alert demonstrates status colors and on-color text.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Color Selection Panel -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-semibold mb-6">Color Selection</h2>
+
+            <div class="space-y-6">
+                <!-- Light Mode Colors -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4 flex items-center">
+                        <span class="w-3 h-3 bg-yellow-400 rounded-full mr-2"></span>
+                        Light Mode
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Primary</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="light-primary" class="color-input" value="#3b82f6">
+                                <span id="light-primary-value" class="text-sm text-gray-600">#3b82f6</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Secondary</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="light-secondary" class="color-input" value="#6b7280">
+                                <span id="light-secondary-value" class="text-sm text-gray-600">#6b7280</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dark Mode Colors -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4 flex items-center">
+                        <span class="w-3 h-3 bg-gray-800 rounded-full mr-2"></span>
+                        Dark Mode
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Primary</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="dark-primary" class="color-input" value="#60a5fa">
+                                <span id="dark-primary-value" class="text-sm text-gray-600">#60a5fa</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Secondary</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="dark-secondary" class="color-input" value="#9ca3af">
+                                <span id="dark-secondary-value" class="text-sm text-gray-600">#9ca3af</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Colors -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Status Colors</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Success</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="success" class="color-input" value="#10b981">
+                                <span id="success-value" class="text-sm text-gray-600">#10b981</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Warning</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="warning" class="color-input" value="#f59e0b">
+                                <span id="warning-value" class="text-sm text-gray-600">#f59e0b</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Error</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="error" class="color-input" value="#ef4444">
+                                <span id="error-value" class="text-sm text-gray-600">#ef4444</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Info</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="info" class="color-input" value="#3b82f6">
+                                <span id="info-value" class="text-sm text-gray-600">#3b82f6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Palette Display -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-semibold mb-6">Color Palette Preview</h2>
+
+            <div class="space-y-6">
+                <!-- Light Mode Preview -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Light Mode</h3>
+                    <div class="grid grid-cols-6 gap-2">
+                        <div id="light-primary-palette" class="space-y-1"></div>
+                        <div id="light-secondary-palette" class="space-y-1"></div>
+                        <div class="flex flex-col space-y-2">
+                            <div class="text-xs font-medium text-gray-600">Success</div>
+                            <div id="success-single" class="w-full h-10 rounded"></div>
+                        </div>
+                        <div class="flex flex-col space-y-2">
+                            <div class="text-xs font-medium text-gray-600">Warning</div>
+                            <div id="warning-single" class="w-full h-10 rounded"></div>
+                        </div>
+                        <div class="flex flex-col space-y-2">
+                            <div class="text-xs font-medium text-gray-600">Error</div>
+                            <div id="error-single" class="w-full h-10 rounded"></div>
+                        </div>
+                        <div class="flex flex-col space-y-2">
+                            <div class="text-xs font-medium text-gray-600">Info</div>
+                            <div id="info-single" class="w-full h-10 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dark Mode Preview -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Dark Mode</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg">
+                        <div class="grid grid-cols-6 gap-2">
+                            <div id="dark-primary-palette" class="space-y-1"></div>
+                            <div id="dark-secondary-palette" class="space-y-1"></div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="text-xs font-medium text-gray-300">Success</div>
+                                <div id="success-single-dark" class="w-full h-10 rounded"></div>
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="text-xs font-medium text-gray-300">Warning</div>
+                                <div id="warning-single-dark" class="w-full h-10 rounded"></div>
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="text-xs font-medium text-gray-300">Error</div>
+                                <div id="error-single-dark" class="w-full h-10 rounded"></div>
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="text-xs font-medium text-gray-300">Info</div>
+                                <div id="info-single-dark" class="w-full h-10 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generated Code Section -->
+    <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-semibold">Generated Tailwind V4 Theme</h2>
+            <button
+                    id="copy-btn"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+                <span>Copy to Clipboard</span>
+            </button>
+        </div>
+        <pre id="generated-code" class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"></pre>
+    </div>
+</div>
+
+<script>
+    // Utility function to convert hex to OKLCH
+    function hexToOklch(hex) {
+        // First convert hex to linear RGB
+        const r1 = parseInt(hex.slice(1, 3), 16) / 255;
+        const g1 = parseInt(hex.slice(3, 5), 16) / 255;
+        const b1 = parseInt(hex.slice(5, 7), 16) / 255;
+
+        // Convert sRGB to linear RGB
+        const toLinear = (c) => c > 0.04045 ? Math.pow((c + 0.055) / 1.055, 2.4) : c / 12.92;
+        const rLin1 = toLinear(r1);
+        const gLin1 = toLinear(g1);
+        const bLin1 = toLinear(b1);
+
+        // Convert linear RGB to OKLab
+        const l1 = 0.4122214708 * rLin1 + 0.5363325363 * gLin1 + 0.0514459929 * bLin1;
+        const m1 = 0.2119034982 * rLin1 + 0.6806995451 * gLin1 + 0.1073969566 * bLin1;
+        const s1 = 0.0883024619 * rLin1 + 0.2817188376 * gLin1 + 0.6299787005 * bLin1;
+
+        const l1_ = Math.cbrt(l1);
+        const m1_ = Math.cbrt(m1);
+        const s1_ = Math.cbrt(s1);
+
+        const L1 = 0.2104542553 * l1_ + 0.7936177850 * m1_ - 0.0040720468 * s1_;
+        const a1 = 1.9779984951 * l1_ - 2.4285922050 * m1_ + 0.4505937099 * s1_;
+        const b1_ = 0.0259040371 * l1_ + 0.7827717662 * m1_ - 0.8086757660 * s1_;
+
+        // Convert OKLab to OKLCH
+        const C1 = Math.sqrt(a1 * a1 + b1_ * b1_);
+        let H1 = Math.atan2(b1_, a1) * 180 / Math.PI;
+        if (H1 < 0) H1 += 360;
+
+        return [L1, C1, H1];
+    }
+
+    // Utility function to convert OKLCH to hex
+    function oklchToHex(L, C, H) {
+        // Convert OKLCH to OKLab
+        const hRad = H * Math.PI / 180;
+        const a2 = C * Math.cos(hRad);
+        const b2 = C * Math.sin(hRad);
+
+        // Convert OKLab to linear RGB
+        const l2_ = L + 0.3963377774 * a2 + 0.2158037573 * b2;
+        const m2_ = L - 0.1055613458 * a2 - 0.0638541728 * b2;
+        const s2_ = L - 0.0894841775 * a2 - 1.2914855480 * b2;
+
+        const l2 = l2_ * l2_ * l2_;
+        const m2 = m2_ * m2_ * m2_;
+        const s2 = s2_ * s2_ * s2_;
+
+        let rLin2 = +4.0767416621 * l2 - 3.3077115913 * m2 + 0.2309699292 * s2;
+        let gLin2 = -1.2684380046 * l2 + 2.6097574011 * m2 - 0.3413193965 * s2;
+        let bLin2 = -0.0041960863 * l2 - 0.7034186147 * m2 + 1.7076147010 * s2;
+
+        // Clamp to [0, 1]
+        rLin2 = Math.max(0, Math.min(1, rLin2));
+        gLin2 = Math.max(0, Math.min(1, gLin2));
+        bLin2 = Math.max(0, Math.min(1, bLin2));
+
+        // Convert linear RGB to sRGB
+        const fromLinear = (c) => c > 0.0031308 ? 1.055 * Math.pow(c, 1 / 2.4) - 0.055 : 12.92 * c;
+        const r2 = fromLinear(rLin2);
+        const g2 = fromLinear(gLin2);
+        const b2_ = fromLinear(bLin2);
+
+        // Convert to hex
+        const toHex = (c) => Math.round(Math.max(0, Math.min(255, c * 255))).toString(16).padStart(2, '0');
+        return `#${toHex(r2)}${toHex(g2)}${toHex(b2_)}`;
+    }
+
+    // Convert hex to HSL for reliable color manipulation
+    function hexToHsl(hex) {
+        const r = parseInt(hex.slice(1, 3), 16) / 255;
+        const g = parseInt(hex.slice(3, 5), 16) / 255;
+        const b = parseInt(hex.slice(5, 7), 16) / 255;
+
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max === min) {
+            h = s = 0;
+        } else {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r:
+                    h = (g - b) / d + (g < b ? 6 : 0);
+                    break;
+                case g:
+                    h = (b - r) / d + 2;
+                    break;
+                case b:
+                    h = (r - g) / d + 4;
+                    break;
+            }
+            h /= 6;
+        }
+
+        return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+    }
+
+    // Convert HSL to hex
+    function hslToHex(h, s, l) {
+        l /= 100;
+        const a = s * Math.min(l, 1 - l) / 100;
+        const f = n => {
+            const k = (n + h / 30) % 12;
+            const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+            return Math.round(255 * color).toString(16).padStart(2, '0');
+        };
+        return `#${f(0)}${f(8)}${f(4)}`;
+    }
+
+    // Contrast helpers for foreground (on-color) tokens
+    function hexToLinear(c) {
+        c = c / 255;
+        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    }
+
+    function hexLuminance(hex) {
+        const r = hexToLinear(parseInt(hex.slice(1, 3), 16));
+        const g = hexToLinear(parseInt(hex.slice(3, 5), 16));
+        const b = hexToLinear(parseInt(hex.slice(5, 7), 16));
+        // Rec. 709
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    function getReadableTextColor(hex) {
+        // Returns #000000 or #ffffff based on WCAG contrast heuristic
+        try {
+            const L = hexLuminance(hex);
+            // Contrast with white: (1.05)/(L+0.05); with black: (L+0.05)/0.05
+            const contrastWithWhite = (1.05) / (L + 0.05);
+            const contrastWithBlack = (L + 0.05) / 0.05;
+            return contrastWithWhite >= contrastWithBlack ? '#ffffff' : '#000000';
+        } catch (e) {
+            return '#000000';
+        }
+    }
+
+    // Generate color scale from a base color using HSL for display and OKLCH for output
+    function generateColorScale(baseColor) {
+        const [h, s, l] = hexToHsl(baseColor);
+        const [L, C, H] = hexToOklch(baseColor);
+        const scale = {};
+
+        // Better lightness distribution that works for both light and dark base colors
+        const lightnesses = {
+            50: l < 50 ? 95 : Math.max(95, l + (95 - l) * 0.8),
+            100: l < 50 ? 90 : Math.max(90, l + (90 - l) * 0.7),
+            200: l < 50 ? 80 : Math.max(80, l + (80 - l) * 0.6),
+            300: l < 50 ? 70 : Math.max(70, l + (70 - l) * 0.4),
+            400: l < 50 ? 60 : Math.max(60, l + (60 - l) * 0.2),
+            500: l,
+            600: l > 50 ? Math.max(40, l - (l - 40) * 0.2) : Math.max(l - 10, 30),
+            700: l > 50 ? Math.max(30, l - (l - 30) * 0.4) : Math.max(l - 20, 25),
+            800: l > 50 ? Math.max(20, l - (l - 20) * 0.6) : Math.max(l - 30, 20),
+            900: l > 50 ? Math.max(15, l - (l - 15) * 0.8) : Math.max(l - 40, 15),
+            950: l > 50 ? Math.max(10, l - (l - 10) * 0.9) : Math.max(l - 50, 10)
+        };
+
+        // Similar improvements for OKLCH
+        const oklchLightnesses = {
+            50: L < 0.5 ? 0.98 : Math.min(0.98, L + (0.98 - L) * 0.8),
+            100: L < 0.5 ? 0.95 : Math.min(0.95, L + (0.95 - L) * 0.7),
+            200: L < 0.5 ? 0.90 : Math.min(0.90, L + (0.90 - L) * 0.6),
+            300: L < 0.5 ? 0.80 : Math.min(0.80, L + (0.80 - L) * 0.4),
+            400: L < 0.5 ? 0.70 : Math.min(0.70, L + (0.70 - L) * 0.2),
+            500: L,
+            600: L > 0.5 ? Math.max(0.35, L - (L - 0.35) * 0.2) : Math.max(L - 0.08, 0.25),
+            700: L > 0.5 ? Math.max(0.25, L - (L - 0.25) * 0.4) : Math.max(L - 0.15, 0.20),
+            800: L > 0.5 ? Math.max(0.18, L - (L - 0.18) * 0.6) : Math.max(L - 0.25, 0.15),
+            900: L > 0.5 ? Math.max(0.12, L - (L - 0.12) * 0.8) : Math.max(L - 0.35, 0.10),
+            950: L > 0.5 ? Math.max(0.08, L - (L - 0.08) * 0.9) : Math.max(L - 0.45, 0.05)
+        };
+
+        Object.entries(lightnesses).forEach(([key, lightness]) => {
+            const hslColor = `hsl(${h}, ${s}%, ${lightness}%)`;
+            const oklchColor = `oklch(${(oklchLightnesses[key].toFixed(5))} ${C.toFixed(5)} ${H.toFixed(1)})`;
+            scale[key] = {
+                hsl: hslColor,
+                oklch: oklchColor,
+                hex: hslToHex(h, s, lightness)
+            };
+        });
+
+        return scale;
+    }
+
+    // Update palette display
+    function updatePalette(colorId, containerId) {
+        const color = document.getElementById(colorId).value;
+        const container = document.getElementById(containerId);
+        const scale = generateColorScale(color);
+
+        container.innerHTML = '';
+        Object.entries(scale).forEach(([weight, colorData]) => {
+            const div = document.createElement('div');
+            div.className = 'palette-item w-full h-8 rounded cursor-pointer';
+            div.style.backgroundColor = colorData.hex;
+            div.title = `${weight}: ${colorData.oklch}`;
+            container.appendChild(div);
+        });
+    }
+
+    // Generate Tailwind theme code
+    function generateThemeCode() {
+        const colors = {
+            lightPrimary: document.getElementById('light-primary').value,
+            lightSecondary: document.getElementById('light-secondary').value,
+            darkPrimary: document.getElementById('dark-primary').value,
+            darkSecondary: document.getElementById('dark-secondary').value,
+            success: document.getElementById('success').value,
+            warning: document.getElementById('warning').value,
+            error: document.getElementById('error').value,
+            info: document.getElementById('info').value,
+        };
+
+        const primaryScale = generateColorScale(colors.lightPrimary);
+        const secondaryScale = generateColorScale(colors.lightSecondary);
+        const darkPrimaryScale = generateColorScale(colors.darkPrimary);
+        const darkSecondaryScale = generateColorScale(colors.darkSecondary);
+
+        // Status scales
+        const successScale = generateColorScale(colors.success);
+        const warningScale = generateColorScale(colors.warning);
+        const errorScale = generateColorScale(colors.error);
+        const infoScale = generateColorScale(colors.info);
+
+        // Foreground tokens for contrast
+        const primaryFg = getReadableTextColor(primaryScale[600].hex);
+        const secondaryFg = getReadableTextColor(secondaryScale[600].hex);
+        const successFg = getReadableTextColor(successScale[600].hex);
+        const warningFg = getReadableTextColor(warningScale[600].hex);
+        const errorFg = getReadableTextColor(errorScale[600].hex);
+        const infoFg = getReadableTextColor(infoScale[600].hex);
+
+        const darkPrimaryFg = getReadableTextColor(darkPrimaryScale[600].hex);
+        const darkSecondaryFg = getReadableTextColor(darkSecondaryScale[600].hex);
+
+        const themeCode = `@import "tailwindcss";
+
+@theme {
+  --color-primary: ${primaryScale[500].oklch};
+  --color-primary-50: ${primaryScale[50].oklch};
+  --color-primary-100: ${primaryScale[100].oklch};
+  --color-primary-200: ${primaryScale[200].oklch};
+  --color-primary-300: ${primaryScale[300].oklch};
+  --color-primary-400: ${primaryScale[400].oklch};
+  --color-primary-500: ${primaryScale[500].oklch};
+  --color-primary-600: ${primaryScale[600].oklch};
+  --color-primary-700: ${primaryScale[700].oklch};
+  --color-primary-800: ${primaryScale[800].oklch};
+  --color-primary-900: ${primaryScale[900].oklch};
+  --color-primary-950: ${primaryScale[950].oklch};
+  --color-primary-content: ${primaryFg};
+
+  --color-secondary: ${secondaryScale[500].oklch};
+  --color-secondary-50: ${secondaryScale[50].oklch};
+  --color-secondary-100: ${secondaryScale[100].oklch};
+  --color-secondary-200: ${secondaryScale[200].oklch};
+  --color-secondary-300: ${secondaryScale[300].oklch};
+  --color-secondary-400: ${secondaryScale[400].oklch};
+  --color-secondary-500: ${secondaryScale[500].oklch};
+  --color-secondary-600: ${secondaryScale[600].oklch};
+  --color-secondary-700: ${secondaryScale[700].oklch};
+  --color-secondary-800: ${secondaryScale[800].oklch};
+  --color-secondary-900: ${secondaryScale[900].oklch};
+  --color-secondary-950: ${secondaryScale[950].oklch};
+  --color-secondary-content: ${secondaryFg};
+
+  --color-success: ${successScale[500].oklch};
+  --color-success-50: ${successScale[50].oklch};
+  --color-success-100: ${successScale[100].oklch};
+  --color-success-200: ${successScale[200].oklch};
+  --color-success-300: ${successScale[300].oklch};
+  --color-success-400: ${successScale[400].oklch};
+  --color-success-500: ${successScale[500].oklch};
+  --color-success-600: ${successScale[600].oklch};
+  --color-success-700: ${successScale[700].oklch};
+  --color-success-800: ${successScale[800].oklch};
+  --color-success-900: ${successScale[900].oklch};
+  --color-success-950: ${successScale[950].oklch};
+  --color-success-content: ${successFg};
+
+  --color-warning: ${warningScale[500].oklch};
+  --color-warning-50: ${warningScale[50].oklch};
+  --color-warning-100: ${warningScale[100].oklch};
+  --color-warning-200: ${warningScale[200].oklch};
+  --color-warning-300: ${warningScale[300].oklch};
+  --color-warning-400: ${warningScale[400].oklch};
+  --color-warning-500: ${warningScale[500].oklch};
+  --color-warning-600: ${warningScale[600].oklch};
+  --color-warning-700: ${warningScale[700].oklch};
+  --color-warning-800: ${warningScale[800].oklch};
+  --color-warning-900: ${warningScale[900].oklch};
+  --color-warning-950: ${warningScale[950].oklch};
+  --color-warning-content: ${warningFg};
+
+  --color-error: ${errorScale[500].oklch};
+  --color-error-50: ${errorScale[50].oklch};
+  --color-error-100: ${errorScale[100].oklch};
+  --color-error-200: ${errorScale[200].oklch};
+  --color-error-300: ${errorScale[300].oklch};
+  --color-error-400: ${errorScale[400].oklch};
+  --color-error-500: ${errorScale[500].oklch};
+  --color-error-600: ${errorScale[600].oklch};
+  --color-error-700: ${errorScale[700].oklch};
+  --color-error-800: ${errorScale[800].oklch};
+  --color-error-900: ${errorScale[900].oklch};
+  --color-error-950: ${errorScale[950].oklch};
+  --color-error-content: ${errorFg};
+
+  --color-info: ${infoScale[500].oklch};
+  --color-info-50: ${infoScale[50].oklch};
+  --color-info-100: ${infoScale[100].oklch};
+  --color-info-200: ${infoScale[200].oklch};
+  --color-info-300: ${infoScale[300].oklch};
+  --color-info-400: ${infoScale[400].oklch};
+  --color-info-500: ${infoScale[500].oklch};
+  --color-info-600: ${infoScale[600].oklch};
+  --color-info-700: ${infoScale[700].oklch};
+  --color-info-800: ${infoScale[800].oklch};
+  --color-info-900: ${infoScale[900].oklch};
+  --color-info-950: ${infoScale[950].oklch};
+  --color-info-content: ${infoFg};
+
+  /* Semantic neutrals (light) */
+  --color-background: #ffffff;
+  --color-content: #0a0a0a;
+  --color-muted: ${secondaryScale[100].oklch};
+  --color-muted-content: ${secondaryScale[700].oklch};
+  --color-card: #ffffff;
+  --color-card-content: #0a0a0a;
+  --color-border: ${secondaryScale[200].oklch};
+  --color-input: ${secondaryScale[200].oklch};
+  --color-ring: ${primaryScale[600].oklch};
+}
+:root { color-scheme: light; }
+
+:root[data-theme="dark"] {
+  --color-primary: ${darkPrimaryScale[500].oklch};
+  --color-primary-50: ${darkPrimaryScale[50].oklch};
+  --color-primary-100: ${darkPrimaryScale[100].oklch};
+  --color-primary-200: ${darkPrimaryScale[200].oklch};
+  --color-primary-300: ${darkPrimaryScale[300].oklch};
+  --color-primary-400: ${darkPrimaryScale[400].oklch};
+  --color-primary-500: ${darkPrimaryScale[500].oklch};
+  --color-primary-600: ${darkPrimaryScale[600].oklch};
+  --color-primary-700: ${darkPrimaryScale[700].oklch};
+  --color-primary-800: ${darkPrimaryScale[800].oklch};
+  --color-primary-900: ${darkPrimaryScale[900].oklch};
+  --color-primary-950: ${darkPrimaryScale[950].oklch};
+  --color-primary-content: ${darkPrimaryFg};
+
+  --color-secondary: ${darkSecondaryScale[500].oklch};
+  --color-secondary-50: ${darkSecondaryScale[50].oklch};
+  --color-secondary-100: ${darkSecondaryScale[100].oklch};
+  --color-secondary-200: ${darkSecondaryScale[200].oklch};
+  --color-secondary-300: ${darkSecondaryScale[300].oklch};
+  --color-secondary-400: ${darkSecondaryScale[400].oklch};
+  --color-secondary-500: ${darkSecondaryScale[500].oklch};
+  --color-secondary-600: ${darkSecondaryScale[600].oklch};
+  --color-secondary-700: ${darkSecondaryScale[700].oklch};
+  --color-secondary-800: ${darkSecondaryScale[800].oklch};
+  --color-secondary-900: ${darkSecondaryScale[900].oklch};
+  --color-secondary-950: ${darkSecondaryScale[950].oklch};
+  --color-secondary-content: ${darkSecondaryFg};
+
+  /* Semantic neutrals (dark) */
+  --color-background: #0a0a0a;
+  --color-content: #fafafa;
+  --color-muted: ${darkSecondaryScale[800].oklch};
+  --color-muted-content: ${darkSecondaryScale[300].oklch};
+  --color-card: #0a0a0a;
+  --color-card-content: #fafafa;
+  --color-border: ${darkSecondaryScale[700].oklch};
+  --color-input: ${darkSecondaryScale[700].oklch};
+  --color-ring: ${darkPrimaryScale[500].oklch};
+}
+
+:root[data-theme="dark"] { color-scheme: dark; }`;
+
+        document.getElementById('generated-code').textContent = themeCode;
+
+        const liveCss = `
+:root {
+  --color-primary: ${primaryScale[500].oklch};
+  --color-primary-50: ${primaryScale[50].oklch};
+  --color-primary-100: ${primaryScale[100].oklch};
+  --color-primary-200: ${primaryScale[200].oklch};
+  --color-primary-300: ${primaryScale[300].oklch};
+  --color-primary-400: ${primaryScale[400].oklch};
+  --color-primary-500: ${primaryScale[500].oklch};
+  --color-primary-600: ${primaryScale[600].oklch};
+  --color-primary-700: ${primaryScale[700].oklch};
+  --color-primary-800: ${primaryScale[800].oklch};
+  --color-primary-900: ${primaryScale[900].oklch};
+  --color-primary-950: ${primaryScale[950].oklch};
+  --color-primary-content: ${primaryFg};
+
+  --color-secondary: ${secondaryScale[500].oklch};
+  --color-secondary-50: ${secondaryScale[50].oklch};
+  --color-secondary-100: ${secondaryScale[100].oklch};
+  --color-secondary-200: ${secondaryScale[200].oklch};
+  --color-secondary-300: ${secondaryScale[300].oklch};
+  --color-secondary-400: ${secondaryScale[400].oklch};
+  --color-secondary-500: ${secondaryScale[500].oklch};
+  --color-secondary-600: ${secondaryScale[600].oklch};
+  --color-secondary-700: ${secondaryScale[700].oklch};
+  --color-secondary-800: ${secondaryScale[800].oklch};
+  --color-secondary-900: ${secondaryScale[900].oklch};
+  --color-secondary-950: ${secondaryScale[950].oklch};
+  --color-secondary-content: ${secondaryFg};
+
+  --color-success: ${successScale[500].oklch};
+  --color-success-50: ${successScale[50].oklch};
+  --color-success-100: ${successScale[100].oklch};
+  --color-success-200: ${successScale[200].oklch};
+  --color-success-300: ${successScale[300].oklch};
+  --color-success-400: ${successScale[400].oklch};
+  --color-success-500: ${successScale[500].oklch};
+  --color-success-600: ${successScale[600].oklch};
+  --color-success-700: ${successScale[700].oklch};
+  --color-success-800: ${successScale[800].oklch};
+  --color-success-900: ${successScale[900].oklch};
+  --color-success-950: ${successScale[950].oklch};
+  --color-success-content: ${successFg};
+
+  --color-warning: ${warningScale[500].oklch};
+  --color-warning-50: ${warningScale[50].oklch};
+  --color-warning-100: ${warningScale[100].oklch};
+  --color-warning-200: ${warningScale[200].oklch};
+  --color-warning-300: ${warningScale[300].oklch};
+  --color-warning-400: ${warningScale[400].oklch};
+  --color-warning-500: ${warningScale[500].oklch};
+  --color-warning-600: ${warningScale[600].oklch};
+  --color-warning-700: ${warningScale[700].oklch};
+  --color-warning-800: ${warningScale[800].oklch};
+  --color-warning-900: ${warningScale[900].oklch};
+  --color-warning-950: ${warningScale[950].oklch};
+  --color-warning-content: ${warningFg};
+
+  --color-error: ${errorScale[500].oklch};
+  --color-error-50: ${errorScale[50].oklch};
+  --color-error-100: ${errorScale[100].oklch};
+  --color-error-200: ${errorScale[200].oklch};
+  --color-error-300: ${errorScale[300].oklch};
+  --color-error-400: ${errorScale[400].oklch};
+  --color-error-500: ${errorScale[500].oklch};
+  --color-error-600: ${errorScale[600].oklch};
+  --color-error-700: ${errorScale[700].oklch};
+  --color-error-800: ${errorScale[800].oklch};
+  --color-error-900: ${errorScale[900].oklch};
+  --color-error-950: ${errorScale[950].oklch};
+  --color-error-content: ${errorFg};
+
+  --color-info: ${infoScale[500].oklch};
+  --color-info-50: ${infoScale[50].oklch};
+  --color-info-100: ${infoScale[100].oklch};
+  --color-info-200: ${infoScale[200].oklch};
+  --color-info-300: ${infoScale[300].oklch};
+  --color-info-400: ${infoScale[400].oklch};
+  --color-info-500: ${infoScale[500].oklch};
+  --color-info-600: ${infoScale[600].oklch};
+  --color-info-700: ${infoScale[700].oklch};
+  --color-info-800: ${infoScale[800].oklch};
+  --color-info-900: ${infoScale[900].oklch};
+  --color-info-950: ${infoScale[950].oklch};
+  --color-info-content: ${infoFg};
+
+  --color-background: #ffffff;
+  --color-content: #0a0a0a;
+  --color-muted: ${secondaryScale[100].oklch};
+  --color-muted-content: ${secondaryScale[700].oklch};
+  --color-card: #ffffff;
+  --color-card-content: #0a0a0a;
+  --color-border: ${secondaryScale[200].oklch};
+  --color-input: ${secondaryScale[200].oklch};
+  --color-ring: ${primaryScale[600].oklch};
+}
+:root[data-theme="dark"] {
+  --color-primary: ${darkPrimaryScale[500].oklch};
+  --color-primary-50: ${darkPrimaryScale[50].oklch};
+  --color-primary-100: ${darkPrimaryScale[100].oklch};
+  --color-primary-200: ${darkPrimaryScale[200].oklch};
+  --color-primary-300: ${darkPrimaryScale[300].oklch};
+  --color-primary-400: ${darkPrimaryScale[400].oklch};
+  --color-primary-500: ${darkPrimaryScale[500].oklch};
+  --color-primary-600: ${darkPrimaryScale[600].oklch};
+  --color-primary-700: ${darkPrimaryScale[700].oklch};
+  --color-primary-800: ${darkPrimaryScale[800].oklch};
+  --color-primary-900: ${darkPrimaryScale[900].oklch};
+  --color-primary-950: ${darkPrimaryScale[950].oklch};
+  --color-primary-content: ${darkPrimaryFg};
+
+  --color-secondary: ${darkSecondaryScale[500].oklch};
+  --color-secondary-50: ${darkSecondaryScale[50].oklch};
+  --color-secondary-100: ${darkSecondaryScale[100].oklch};
+  --color-secondary-200: ${darkSecondaryScale[200].oklch};
+  --color-secondary-300: ${darkSecondaryScale[300].oklch};
+  --color-secondary-400: ${darkSecondaryScale[400].oklch};
+  --color-secondary-500: ${darkSecondaryScale[500].oklch};
+  --color-secondary-600: ${darkSecondaryScale[600].oklch};
+  --color-secondary-700: ${darkSecondaryScale[700].oklch};
+  --color-secondary-800: ${darkSecondaryScale[800].oklch};
+  --color-secondary-900: ${darkSecondaryScale[900].oklch};
+  --color-secondary-950: ${darkSecondaryScale[950].oklch};
+  --color-secondary-content: ${darkSecondaryFg};
+
+  --color-success: ${successScale[500].oklch};
+  --color-success-50: ${successScale[50].oklch};
+  --color-success-100: ${successScale[100].oklch};
+  --color-success-200: ${successScale[200].oklch};
+  --color-success-300: ${successScale[300].oklch};
+  --color-success-400: ${successScale[400].oklch};
+  --color-success-500: ${successScale[500].oklch};
+  --color-success-600: ${successScale[600].oklch};
+  --color-success-700: ${successScale[700].oklch};
+  --color-success-800: ${successScale[800].oklch};
+  --color-success-900: ${successScale[900].oklch};
+  --color-success-950: ${successScale[950].oklch};
+  --color-success-content: ${successFg};
+
+  --color-warning: ${warningScale[500].oklch};
+  --color-warning-50: ${warningScale[50].oklch};
+  --color-warning-100: ${warningScale[100].oklch};
+  --color-warning-200: ${warningScale[200].oklch};
+  --color-warning-300: ${warningScale[300].oklch};
+  --color-warning-400: ${warningScale[400].oklch};
+  --color-warning-500: ${warningScale[500].oklch};
+  --color-warning-600: ${warningScale[600].oklch};
+  --color-warning-700: ${warningScale[700].oklch};
+  --color-warning-800: ${warningScale[800].oklch};
+  --color-warning-900: ${warningScale[900].oklch};
+  --color-warning-950: ${warningScale[950].oklch};
+  --color-warning-content: ${warningFg};
+
+  --color-error: ${errorScale[500].oklch};
+  --color-error-50: ${errorScale[50].oklch};
+  --color-error-100: ${errorScale[100].oklch};
+  --color-error-200: ${errorScale[200].oklch};
+  --color-error-300: ${errorScale[300].oklch};
+  --color-error-400: ${errorScale[400].oklch};
+  --color-error-500: ${errorScale[500].oklch};
+  --color-error-600: ${errorScale[600].oklch};
+  --color-error-700: ${errorScale[700].oklch};
+  --color-error-800: ${errorScale[800].oklch};
+  --color-error-900: ${errorScale[900].oklch};
+  --color-error-950: ${errorScale[950].oklch};
+  --color-error-content: ${errorFg};
+
+  --color-info: ${infoScale[500].oklch};
+  --color-info-50: ${infoScale[50].oklch};
+  --color-info-100: ${infoScale[100].oklch};
+  --color-info-200: ${infoScale[200].oklch};
+  --color-info-300: ${infoScale[300].oklch};
+  --color-info-400: ${infoScale[400].oklch};
+  --color-info-500: ${infoScale[500].oklch};
+  --color-info-600: ${infoScale[600].oklch};
+  --color-info-700: ${infoScale[700].oklch};
+  --color-info-800: ${infoScale[800].oklch};
+  --color-info-900: ${infoScale[900].oklch};
+  --color-info-950: ${infoScale[950].oklch};
+  --color-info-content: ${infoFg};
+
+  --color-background: #0a0a0a;
+  --color-content: #fafafa;
+  --color-muted: ${darkSecondaryScale[800].oklch};
+  --color-muted-content: ${darkSecondaryScale[300].oklch};
+  --color-card: #0a0a0a;
+  --color-card-content: #fafafa;
+  --color-border: ${darkSecondaryScale[700].oklch};
+  --color-input: ${darkSecondaryScale[700].oklch};
+  --color-ring: ${darkPrimaryScale[500].oklch};
+}`;
+
+        const styleEl = document.getElementById('live-theme-vars');
+        if (styleEl) styleEl.textContent = liveCss;
+    }
+
+
+    // Update color value display
+    function updateColorValue(inputId) {
+        const input = document.getElementById(inputId);
+        const valueSpan = document.getElementById(inputId + '-value');
+        valueSpan.textContent = input.value;
+    }
+
+    // Initialize event listeners
+    document.addEventListener('DOMContentLoaded', function () {
+        const colorInputs = [
+            'light-primary', 'light-secondary', 'dark-primary', 'dark-secondary',
+            'success', 'warning', 'error', 'info'
+        ];
+
+        colorInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            input.addEventListener('input', function () {
+                updateColorValue(inputId);
+
+                // Update corresponding palettes
+                if (inputId === 'light-primary') {
+                    updatePalette(inputId, 'light-primary-palette');
+                } else if (inputId === 'light-secondary') {
+                    updatePalette(inputId, 'light-secondary-palette');
+                } else if (inputId === 'dark-primary') {
+                    updatePalette(inputId, 'dark-primary-palette');
+                } else if (inputId === 'dark-secondary') {
+                    updatePalette(inputId, 'dark-secondary-palette');
+                } else if (inputId === 'success') {
+                    document.getElementById('success-single').style.backgroundColor = input.value;
+                    document.getElementById('success-single-dark').style.backgroundColor = input.value;
+                } else if (inputId === 'warning') {
+                    document.getElementById('warning-single').style.backgroundColor = input.value;
+                    document.getElementById('warning-single-dark').style.backgroundColor = input.value;
+                } else if (inputId === 'error') {
+                    document.getElementById('error-single').style.backgroundColor = input.value;
+                    document.getElementById('error-single-dark').style.backgroundColor = input.value;
+                } else if (inputId === 'info') {
+                    document.getElementById('info-single').style.backgroundColor = input.value;
+                    document.getElementById('info-single-dark').style.backgroundColor = input.value;
+                }
+
+                generateThemeCode();
+            });
+        });
+
+        // Copy to clipboard functionality
+        document.getElementById('copy-btn').addEventListener('click', async function () {
+            const code = document.getElementById('generated-code').textContent;
+            try {
+                await navigator.clipboard.writeText(code);
+                const btn = this;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Copied!</span>';
+                btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                btn.classList.add('bg-green-600');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('bg-green-600');
+                    btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy to clipboard');
+            }
+        });
+
+        // Initialize palettes and code
+        colorInputs.forEach(inputId => {
+            updateColorValue(inputId);
+            if (inputId === 'light-primary') {
+                updatePalette(inputId, 'light-primary-palette');
+            } else if (inputId === 'light-secondary') {
+                updatePalette(inputId, 'light-secondary-palette');
+            } else if (inputId === 'dark-primary') {
+                updatePalette(inputId, 'dark-primary-palette');
+            } else if (inputId === 'dark-secondary') {
+                updatePalette(inputId, 'dark-secondary-palette');
+            } else if (inputId === 'success') {
+                document.getElementById('success-single').style.backgroundColor = document.getElementById(inputId).value;
+                document.getElementById('success-single-dark').style.backgroundColor = document.getElementById(inputId).value;
+            } else if (inputId === 'warning') {
+                document.getElementById('warning-single').style.backgroundColor = document.getElementById(inputId).value;
+                document.getElementById('warning-single-dark').style.backgroundColor = document.getElementById(inputId).value;
+            } else if (inputId === 'error') {
+                document.getElementById('error-single').style.backgroundColor = document.getElementById(inputId).value;
+                document.getElementById('error-single-dark').style.backgroundColor = document.getElementById(inputId).value;
+            } else if (inputId === 'info') {
+                document.getElementById('info-single').style.backgroundColor = document.getElementById(inputId).value;
+                document.getElementById('info-single-dark').style.backgroundColor = document.getElementById(inputId).value;
+            }
+        });
+        generateThemeCode();
+    });
+</script>
+</body>
+</html>
