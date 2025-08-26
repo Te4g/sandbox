@@ -1,377 +1,879 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tailwind V4 Theme Generator</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Tailwind v4 Theme Generator — Refined</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .color-input {
             -webkit-appearance: none;
-            border: none;
+            border: solid, 1px;
             width: 60px;
             height: 40px;
             border-radius: 8px;
-            cursor: pointer;
+            cursor: pointer
         }
 
         .color-input::-webkit-color-swatch-wrapper {
-            padding: 0;
+            padding: 0
         }
 
         .color-input::-webkit-color-swatch {
             border: none;
-            border-radius: 8px;
+            border-radius: 8px
         }
 
-        .palette-item {
-            transition: transform 0.2s ease;
+        .kbd {
+            border: 1px solid #e5e7eb;
+            border-bottom-width: 2px;
+            border-radius: .375rem;
+            padding: .125rem .375rem;
+            font-size: .75rem
         }
 
-        .palette-item:hover {
-            transform: scale(1.05);
+        body {
+            color: var(--color-foreground);
+            background: var(--surface-1)
+        }
+
+        .token-card {
+            transition: background .15s ease, transform .05s ease;
+        }
+
+        .token-card:active {
+            transform: scale(0.995);
+        }
+
+        .copy-btn {
+            font-size: .75rem;
+            padding: .25rem .5rem;
+            border-radius: .375rem;
+            border: 1px solid var(--color-border);
+        }
+
+        .copy-btn:hover {
+            background: var(--surface-3);
+        }
+
+        .group-summary {
+            list-style: none;
+        }
+
+        .group-summary::-webkit-details-marker {
+            display: none;
         }
     </style>
     <style id="live-theme-vars"></style>
 </head>
-<body class="bg-gray-50 min-h-screen py-8">
+
+<body class="bg-[--color-background] min-h-screen py-8">
 <div class="max-w-7xl mx-auto px-4">
-    <header class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Tailwind V4 Theme Generator</h1>
-        <p class="text-gray-600">Create custom color themes for your Tailwind CSS v4 project</p>
-    </header>
-
-    <section class="mb-8">
-        <div class="rounded-lg border p-6
-                    bg-[--color-background] text-[--color-content] border-[--color-border] relative">
-            <h2 class="text-2xl font-semibold mb-2">Live Theme Demo</h2>
-            <div class="rounded-full absolute top-2 right-2 w-32 border text-center p-1"
-                 onclick="(function(){const r=document.documentElement;const isDark=r.getAttribute('data-theme')==='dark';if(isDark){r.removeAttribute('data-theme');localStorage.setItem('theme','light');r.style.colorScheme='light';}else{r.setAttribute('data-theme','dark');localStorage.setItem('theme','dark');r.style.colorScheme='dark';}})()"
-            >
-                Dark mode
-            </div>
-            <p class="text-sm mb-4 text-[--color-muted-content]">
-                This section previews semantic tokens: background, foreground, muted, card, border, ring, and on-color
-                text.
-            </p>
-
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Text + Buttons -->
-                <div>
-                    <h3 class="font-semibold mb-2">Buttons</h3>
-                    <div class="flex items-center gap-3">
-                        <button class="px-4 py-2 rounded
-                           bg-[--color-primary] text-[--color-primary-content]
-                           hover:bg-[--color-primary-700]
-                           focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
-                            Primary
-                        </button>
-                        <button class="px-4 py-2 rounded border
-                                       bg-[--color-secondary] text-[--color-secondary-content] border-[--color-input]
-                                       hover:bg-[--color-muted]
-                                       focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
-                            Secondary
-                        </button>
-                        <span class="text-xs px-2 py-1 rounded
-                                     bg-[--color-primary-100] text-[--color-primary-700] border border-[--color-primary-200]">
-                            Subtle badge
-                        </span>
-                    </div>
-
-                    <h3 class="font-semibold mt-6 mb-2">Typography</h3>
-                    <p class="mb-1">
-                        Body text uses text-[--color-content]. This should remain readable in light and dark.
-                    </p>
-                    <p class="text-sm text-[--color-muted-content]">
-                        Muted text uses text-[--color-muted-content] for lower emphasis.
-                    </p>
-                </div>
-
-                <!-- Card + Input + Alert -->
-                <div class="space-y-4">
-                    <div class="rounded border p-4 bg-[--color-card] text-[--color-card-content] border-[--color-border]">
-                        <h4 class="font-semibold mb-1">Card title</h4>
-                        <p class="text-sm text-[--color-muted-content] mb-3">Card uses bg-[--color-card] and
-                            text-[--color-card-content].</p>
-                        <input
-                                class="w-full rounded px-3 py-2 bg-[--color-background] text-[--color-content]
-                                   border border-[--color-input]
-                                   focus:outline-none focus:ring-2 focus:ring-[--color-ring]"
-                                placeholder="Input using border-[--color-input]"/>
-                    </div>
-
-                    <div class="rounded border p-4 border-[--color-success-200] bg-[--color-success-100]">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="inline-block px-2 py-0.5 rounded
-                                         bg-[--color-success-600] text-[--color-success-content]">
-                                Success
-                            </span>
-                            <span class="text-sm font-medium text-[--color-success-700]">Action complete</span>
-                        </div>
-                        <p class="text-sm text-[--color-success-700]">
-                            This alert demonstrates status colors and on-color text.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="grid lg:grid-cols-2 gap-8">
-        <!-- Color Selection Panel -->
-        <div class="bg-white rounded-lg shadow-lg p-6">
-            <h2 class="text-2xl font-semibold mb-6">Color Selection</h2>
-
-            <div class="space-y-6">
-                <!-- Light Mode Colors -->
-                <div>
-                    <h3 class="text-lg font-medium mb-4 flex items-center">
-                        <span class="w-3 h-3 bg-yellow-400 rounded-full mr-2"></span>
-                        Light Mode
-                    </h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Primary</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="color" id="light-primary" class="color-input" value="#3b82f6">
-                                <span id="light-primary-value" class="text-sm text-gray-600">#3b82f6</span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Secondary</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="color" id="light-secondary" class="color-input" value="#6b7280">
-                                <span id="light-secondary-value" class="text-sm text-gray-600">#6b7280</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dark Mode Colors -->
-                <div>
-                    <h3 class="text-lg font-medium mb-4 flex items-center">
-                        <span class="w-3 h-3 bg-gray-800 rounded-full mr-2"></span>
-                        Dark Mode
-                    </h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Primary</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="color" id="dark-primary" class="color-input" value="#60a5fa">
-                                <span id="dark-primary-value" class="text-sm text-gray-600">#60a5fa</span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Secondary</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="color" id="dark-secondary" class="color-input" value="#9ca3af">
-                                <span id="dark-secondary-value" class="text-sm text-gray-600">#9ca3af</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Status Colors -->
-                <div>
-                    <h3 class="text-lg font-medium mb-4">Status Colors</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Success</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="color" id="success" class="color-input" value="#10b981">
-                                <span id="success-value" class="text-sm text-gray-600">#10b981</span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Warning</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="color" id="warning" class="color-input" value="#f59e0b">
-                                <span id="warning-value" class="text-sm text-gray-600">#f59e0b</span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Error</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="color" id="error" class="color-input" value="#ef4444">
-                                <span id="error-value" class="text-sm text-gray-600">#ef4444</span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Info</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="color" id="info" class="color-input" value="#3b82f6">
-                                <span id="info-value" class="text-sm text-gray-600">#3b82f6</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <header class="flex items-start justify-between mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-[--color-foreground] mb-1">Tailwind v4 Theme Generator</h1>
+            <p class="text-[--color-muted-foreground]">Create accessible, OKLCH-driven themes with light/dark, accent,
+                states & more.</p>
         </div>
 
-        <!-- Color Palette Display -->
-        <div class="bg-white rounded-lg shadow-lg p-6">
-            <h2 class="text-2xl font-semibold mb-6">Color Palette Preview</h2>
-
-            <div class="space-y-6">
-                <!-- Light Mode Preview -->
-                <div>
-                    <h3 class="text-lg font-medium mb-4">Light Mode</h3>
-                    <div class="grid grid-cols-6 gap-2">
-                        <div id="light-primary-palette" class="space-y-1"></div>
-                        <div id="light-secondary-palette" class="space-y-1"></div>
-                        <div class="flex flex-col space-y-2">
-                            <div class="text-xs font-medium text-gray-600">Success</div>
-                            <div id="success-single" class="w-full h-10 rounded"></div>
-                        </div>
-                        <div class="flex flex-col space-y-2">
-                            <div class="text-xs font-medium text-gray-600">Warning</div>
-                            <div id="warning-single" class="w-full h-10 rounded"></div>
-                        </div>
-                        <div class="flex flex-col space-y-2">
-                            <div class="text-xs font-medium text-gray-600">Error</div>
-                            <div id="error-single" class="w-full h-10 rounded"></div>
-                        </div>
-                        <div class="flex flex-col space-y-2">
-                            <div class="text-xs font-medium text-gray-600">Info</div>
-                            <div id="info-single" class="w-full h-10 rounded"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dark Mode Preview -->
-                <div>
-                    <h3 class="text-lg font-medium mb-4">Dark Mode</h3>
-                    <div class="bg-gray-900 p-4 rounded-lg">
-                        <div class="grid grid-cols-6 gap-2">
-                            <div id="dark-primary-palette" class="space-y-1"></div>
-                            <div id="dark-secondary-palette" class="space-y-1"></div>
-                            <div class="flex flex-col space-y-2">
-                                <div class="text-xs font-medium text-gray-300">Success</div>
-                                <div id="success-single-dark" class="w-full h-10 rounded"></div>
-                            </div>
-                            <div class="flex flex-col space-y-2">
-                                <div class="text-xs font-medium text-gray-300">Warning</div>
-                                <div id="warning-single-dark" class="w-full h-10 rounded"></div>
-                            </div>
-                            <div class="flex flex-col space-y-2">
-                                <div class="text-xs font-medium text-gray-300">Error</div>
-                                <div id="error-single-dark" class="w-full h-10 rounded"></div>
-                            </div>
-                            <div class="flex flex-col space-y-2">
-                                <div class="text-xs font-medium text-gray-300">Info</div>
-                                <div id="info-single-dark" class="w-full h-10 rounded"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Generated Code Section -->
-    <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-semibold">Generated Tailwind V4 Theme</h2>
-            <button
-                    id="copy-btn"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
-            >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                </svg>
-                <span>Copy to Clipboard</span>
+        <div class="flex items-center gap-3">
+            <button id="theme-toggle"
+                    class="rounded-full border px-3 py-1.5 bg-[--surface-1] hover:bg-[--surface-3] text-sm flex items-center gap-2"
+                    aria-pressed="false" aria-label="Toggle dark mode">
+                <span id="theme-toggle-label">Dark mode</span>
+                <span aria-hidden="true" class="kbd">⌘/</span>
             </button>
         </div>
-        <pre id="generated-code" class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"></pre>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="mb-6 flex gap-2">
+        <button data-tab="builder"
+                class="tab-btn rounded px-3 py-1.5 border bg-[--surface-2] text-sm"
+                aria-selected="true">
+            Builder
+        </button>
+        <button data-tab="tokens"
+                class="tab-btn rounded px-3 py-1.5 border bg-[--surface-1] text-sm">
+            All tokens
+        </button>
+    </nav>
+
+    <div id="tab-builder">
+        <!-- Live Demo -->
+        <section class="mb-8">
+            <div class="rounded-lg border p-6 bg-[--surface-1] text-[--color-foreground] border-[--color-border] relative">
+                <h2 class="text-2xl font-semibold mb-2">Live Theme Demo</h2>
+                <p class="text-sm mb-4 text-[--color-muted-foreground]">
+                    Preview of semantic tokens: background/content, surfaces, borders, ring, and on-color text.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Buttons + Typography -->
+                    <div>
+                        <h3 class="font-semibold mb-2">Buttons</h3>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button class="px-4 py-2 rounded bg-[--color-primary] text-[--color-primary-foreground] focus:outline-none
+                           ring-offset-2 focus:ring-2 focus:ring-[--color-ring] hover:brightness-95 active:brightness-90">
+                                Primary
+                            </button>
+                            <button class="px-4 py-2 rounded bg-[--color-secondary] text-[--color-secondary-foreground] focus:outline-none
+                           ring-offset-2 focus:ring-2 focus:ring-[--color-ring] hover:brightness-95 active:brightness-90">
+                                Secondary
+                            </button>
+                            <button class="px-4 py-2 rounded bg-[--color-accent] text-[--color-accent-foreground] focus:outline-none
+                           ring-offset-2 focus:ring-2 focus:ring-[--color-ring] hover:brightness-95 active:brightness-90">
+                                Accent
+                            </button>
+                            <a href="#"
+                               class="underline text-[--color-link] hover:text-[--color-link-hover] visited:text-[--color-link-visited]">
+                                Link
+                            </a>
+                            <span class="text-xs px-2 py-1 rounded bg-[--color-primary-100] text-[--color-primary-700]
+                         border border-[--color-primary-200]">
+              Subtle badge
+            </span>
+                        </div>
+
+                        <h3 class="font-semibold mt-6 mb-2">Typography</h3>
+                        <p class="mb-1">
+                            Body text uses <code class="px-1 py-0.5 rounded">text-[--color-foreground]</code>.
+                        </p>
+                        <p class="text-sm text-[--color-muted-foreground]">
+                            Muted text uses <code class="px-1 py-0.5 rounded">text-[--color-muted-foreground]</code>.
+                        </p>
+                    </div>
+
+                    <!-- Card + Input + Alert -->
+                    <div class="space-y-4">
+                        <div class="rounded border p-4 bg-[--surface-2] text-[--color-surface-1] border-[--color-border]">
+                            <h4 class="font-semibold mb-1">Card title</h4>
+                            <p class="text-sm text-[--color-muted-foreground] mb-3">
+                                Cards use surface steps and card/content tokens.
+                            </p>
+                            <input class="w-full rounded px-3 py-2 bg-[--surface-1] text-[--color-foreground]
+                          border border-[--color-border] focus:outline-none
+                          focus:ring-2 focus:ring-[--color-ring]"
+                                   placeholder="Input using border-[--color-border]"/>
+                        </div>
+
+                        <div class="rounded border p-4 border-[--color-success-200] bg-[--color-success-100]">
+                            <div class="flex items-center gap-2 mb-2">
+              <span class="inline-block px-2 py-0.5 rounded bg-[--color-success-600] text-[--color-success-foreground]">
+                Success
+              </span>
+                                <span class="text-sm font-medium text-[--color-success-700]">Action complete</span>
+                            </div>
+                            <p class="text-sm text-[--color-success-700]">Status colors and on-color text.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Controls -->
+            <div class="bg-[--surface-1] border rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6">Color Selection</h2>
+
+                <div class="space-y-6">
+                    <!-- Light Mode -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4 flex items-center">
+                            <span class="w-3 h-3 bg-yellow-400 rounded-full mr-2"></span> Light Mode
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Primary -->
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Primary</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="light-primary" class="color-input" value="#316dca"
+                                           aria-label="Light primary color">
+                                    <span id="light-primary-value" class="text-sm text-[--color-muted-foreground]">#316dca</span>
+                                </div>
+                                <label class="flex items-center gap-2 mt-2 text-xs text-[--color-muted-foreground]">
+                                    <input type="checkbox" id="sync-primary" class="rounded"> Use same for dark mode
+                                </label>
+                            </div>
+                            <!-- Secondary -->
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Secondary</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="light-secondary" class="color-input" value="#6b7280"
+                                           aria-label="Light secondary color">
+                                    <span id="light-secondary-value" class="text-sm text-[--color-muted-foreground]">#6b7280</span>
+                                </div>
+                                <label class="flex items-center gap-2 mt-2 text-xs text-[--color-muted-foreground]">
+                                    <input type="checkbox" id="sync-secondary" class="rounded"> Use same for dark mode
+                                </label>
+                            </div>
+                            <!-- Accent -->
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Accent
+                                    (CTA)</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="light-accent" class="color-input" value="#f29d38"
+                                           aria-label="Light accent color">
+                                    <span id="light-accent-value" class="text-sm text-[--color-muted-foreground]">#f29d38</span>
+                                </div>
+                                <label class="flex items-center gap-2 mt-2 text-xs text-[--color-muted-foreground]">
+                                    <input type="checkbox" id="sync-accent" class="rounded"> Use same for dark mode
+                                </label>
+                            </div>
+                            <!-- Link -->
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Link</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="light-link" class="color-input" value="#2952a3"
+                                           aria-label="Light link color">
+                                    <span id="light-link-value"
+                                          class="text-sm text-[--color-muted-foreground]">#2952a3</span>
+                                </div>
+                                <label class="flex items-center gap-2 mt-2 text-xs text-[--color-muted-foreground]">
+                                    <input type="checkbox" id="sync-link" class="rounded"> Use same for dark mode
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dark Mode -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4 flex items-center">
+                            <span class="w-3 h-3 bg-[--surface-1] rounded-full mr-2"></span> Dark Mode
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Primary</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="dark-primary" class="color-input" value="#60a5fa"
+                                           aria-label="Dark primary color">
+                                    <span id="dark-primary-value" class="text-sm text-[--color-muted-foreground]">#60a5fa</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Secondary</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="dark-secondary" class="color-input" value="#9ca3af"
+                                           aria-label="Dark secondary color">
+                                    <span id="dark-secondary-value" class="text-sm text-[--color-muted-foreground]">#9ca3af</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Accent
+                                    (CTA)</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="dark-accent" class="color-input" value="#f29d38"
+                                           aria-label="Dark accent color">
+                                    <span id="dark-accent-value"
+                                          class="text-sm text-[--color-muted-foreground]">#f29d38</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Link</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="dark-link" class="color-input" value="#8bb5ff"
+                                           aria-label="Dark link color">
+                                    <span id="dark-link-value"
+                                          class="text-sm text-[--color-muted-foreground]">#8bb5ff</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Neutrals (Dark) -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">Neutral Colors (Dark Mode)</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Background</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="dark-background" class="color-input" value="#151b23">
+                                    <span id="dark-background-value" class="text-sm text-[--color-muted-foreground]">#151b23</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Content
+                                    (Text)</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="dark-foreground" class="color-input" value="#fafafa">
+                                    <span id="dark-foreground-value" class="text-sm text-[--color-muted-foreground]">#fafafa</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Neutrals (Light) -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">Neutral Colors (Light Mode)</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Background</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="light-background" class="color-input" value="#fafafa">
+                                    <span id="light-background-value" class="text-sm text-[--color-muted-foreground]">#fafafa</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Content
+                                    (Text)</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="light-foreground" class="color-input" value="#151b23">
+                                    <span id="light-foreground-value" class="text-sm text-[--color-muted-foreground]">#151b23</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">Status Colors</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Success</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="success" class="color-input" value="#10b981">
+                                    <span id="success-value"
+                                          class="text-sm text-[--color-muted-foreground]">#10b981</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Warning</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="warning" class="color-input" value="#eab308">
+                                    <span id="warning-value"
+                                          class="text-sm text-[--color-muted-foreground]">#eab308</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Error</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="error" class="color-input" value="#dc2626">
+                                    <span id="error-value"
+                                          class="text-sm text-[--color-muted-foreground]">#dc2626</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-[--color-foreground] mb-2">Info</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="info" class="color-input" value="#0ea5e9">
+                                    <span id="info-value" class="text-sm text-[--color-muted-foreground]">#0ea5e9</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Palette + Contrast -->
+            <div class="bg-[--surface-1] border rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6">Palette & Contrast Preview</h2>
+
+                <div class="space-y-6">
+                    <!-- Light palettes -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">Light Mode</h3>
+                        <div class="grid grid-cols-7 gap-2">
+                            <div>
+                                <div class="text-xs font-medium text-[--color-muted-foreground] mb-1">Primary</div>
+                                <div id="light-primary-palette" class="space-y-1"></div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-medium text-[--color-muted-foreground] mb-1">Secondary</div>
+                                <div id="light-secondary-palette" class="space-y-1"></div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-medium text-[--color-muted-foreground] mb-1">Accent</div>
+                                <div id="light-accent-palette" class="space-y-1"></div>
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="text-xs  font-medium text-[--color-muted-foreground]">Success</div>
+                                <div id="success-single" class="border w-full h-10 rounded"></div>
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="text-xs font-medium text-[--color-muted-foreground]">Warning</div>
+                                <div id="warning-single" class="border w-full h-10 rounded"></div>
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="text-xs font-medium text-[--color-muted-foreground]">Error</div>
+                                <div id="error-single" class="border w-full h-10 rounded"></div>
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="text-xs font-medium text-[--color-muted-foreground]">Info</div>
+                                <div id="info-single" class="border w-full h-10 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dark palettes -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">Dark Mode</h3>
+                        <div class="bg-[--surface-1] p-4 rounded-lg">
+                            <div class="grid grid-cols-7 gap-2">
+                                <div>
+                                    <div class="text-xs font-medium text-[--color-muted-foreground] mb-1">Primary</div>
+                                    <div id="dark-primary-palette" class="space-y-1"></div>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-medium text-[--color-muted-foreground] mb-1">Secondary
+                                    </div>
+                                    <div id="dark-secondary-palette" class="space-y-1"></div>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-medium text-[--color-muted-foreground] mb-1">Accent</div>
+                                    <div id="dark-accent-palette" class="space-y-1"></div>
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <div class="text-xs font-medium text-[--color-muted-foreground]">Success</div>
+                                    <div id="success-single-dark" class="border w-full h-10 rounded"></div>
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <div class="text-xs font-medium text-[--color-muted-foreground]">Warning</div>
+                                    <div id="warning-single-dark" class="border w-full h-10 rounded"></div>
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <div class="text-xs font-medium text-[--color-muted-foreground]">Error</div>
+                                    <div id="error-single-dark" class="border w-full h-10 rounded"></div>
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <div class="text-xs font-medium text-[--color-muted-foreground]">Info</div>
+                                    <div id="info-single-dark" class="border w-full h-10 rounded"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contrast audit -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-2">WCAG Contrast Audit</h3>
+                        <p class="text-sm text-[--color-muted-foreground] mb-3">AA≥4.5 (normal), AAA≥7.0. Large text
+                            AA≥3.0.</p>
+                        <div id="contrast-table" class="overflow-x-auto">
+                            <!-- injected -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Usage Guide (expanded) -->
+        <section class="mt-8 bg-[--surface-1] border rounded-lg shadow-lg p-6 space-y-8">
+            <header>
+                <h2 class="text-2xl font-semibold mb-1">When to use each color class</h2>
+                <p class="text-sm text-[--color-muted-foreground]">
+                    A simple, practical guide for every token this tool generates: what it’s for, and the Tailwind
+                    classes to use.
+                </p>
+            </header>
+
+            <!-- Quick reference table -->
+            <div>
+                <h3 class="text-lg font-semibold mb-3">Quick reference (what to use where)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm border border-[--color-border] rounded">
+                        <thead>
+                        <tr class="text-left border-b border-[--color-border]">
+                            <th class="py-2 px-3">Use-case</th>
+                            <th class="py-2 px-3">Background / Fill</th>
+                            <th class="py-2 px-3">Text</th>
+                            <th class="py-2 px-3">Border</th>
+                            <th class="py-2 px-3">Focus</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="border-b border-[--color-border]">
+                            <td class="py-2 px-3">Page base</td>
+                            <td class="py-2 px-3">bg-[--surface-1]</td>
+                            <td class="py-2 px-3">text-[--color-foreground]</td>
+                            <td class="py-2 px-3">border-[--color-border-soft] (dividers)</td>
+                            <td class="py-2 px-3">—</td>
+                        </tr>
+                        <tr class="border-b border-[--color-border]">
+                            <td class="py-2 px-3">Card / Panel</td>
+                            <td class="py-2 px-3">bg-[--surface-2]</td>
+                            <td class="py-2 px-3">text-[--color-surface-1] (or text-[--color-foreground])</td>
+                            <td class="py-2 px-3">border-[--color-border]</td>
+                            <td class="py-2 px-3">focus:ring-[--color-ring]</td>
+                        </tr>
+                        <tr class="border-b border-[--color-border]">
+                            <td class="py-2 px-3">Primary button</td>
+                            <td class="py-2 px-3">bg-[--color-primary]</td>
+                            <td class="py-2 px-3">text-[--color-primary-foreground]</td>
+                            <td class="py-2 px-3">border-transparent or border-[--color-primary-600]</td>
+                            <td class="py-2 px-3">focus:ring-[--color-ring]</td>
+                        </tr>
+                        <tr class="border-b border-[--color-border]">
+                            <td class="py-2 px-3">Secondary button</td>
+                            <td class="py-2 px-3">bg-[--color-secondary]</td>
+                            <td class="py-2 px-3">text-[--color-secondary-foreground]</td>
+                            <td class="py-2 px-3">border-transparent</td>
+                            <td class="py-2 px-3">focus:ring-[--color-ring]</td>
+                        </tr>
+                        <tr class="border-b border-[--color-border]">
+                            <td class="py-2 px-3">Quiet button</td>
+                            <td class="py-2 px-3">bg-[--color-primary-50]</td>
+                            <td class="py-2 px-3">text-[--color-primary-700]</td>
+                            <td class="py-2 px-3">border-[--color-primary-200]</td>
+                            <td class="py-2 px-3">focus:ring-[--color-ring]</td>
+                        </tr>
+                        <tr class="border-b border-[--color-border]">
+                            <td class="py-2 px-3">Accent CTA / Chip</td>
+                            <td class="py-2 px-3">bg-[--color-accent]</td>
+                            <td class="py-2 px-3">text-[--color-accent-foreground]</td>
+                            <td class="py-2 px-3">—</td>
+                            <td class="py-2 px-3">focus:ring-[--color-ring]</td>
+                        </tr>
+                        <tr class="border-b border-[--color-border]">
+                            <td class="py-2 px-3">Link</td>
+                            <td class="py-2 px-3">—</td>
+                            <td class="py-2 px-3">text-[--color-link] hover:text-[--color-link-hover]
+                                visited:text-[--color-link-visited]
+                            </td>
+                            <td class="py-2 px-3">—</td>
+                            <td class="py-2 px-3">outline-offset/underline for focus</td>
+                        </tr>
+                        <tr class="border-b border-[--color-border]">
+                            <td class="py-2 px-3">Input / Field</td>
+                            <td class="py-2 px-3">bg-[--surface-1]</td>
+                            <td class="py-2 px-3">text-[--color-foreground]
+                                placeholder:text-[--color-muted-foreground]
+                            </td>
+                            <td class="py-2 px-3">border-[--color-border]</td>
+                            <td class="py-2 px-3">focus:ring-[--color-ring] focus:ring-2</td>
+                        </tr>
+                        <tr class="border-b border-[--color-border]">
+                            <td class="py-2 px-3">Banner (success/warn/error/info)</td>
+                            <td class="py-2 px-3">bg-[--color-<em>status</em>-100]</td>
+                            <td class="py-2 px-3">text-[--color-<em>status</em>-700]</td>
+                            <td class="py-2 px-3">border-[--color-<em>status</em>-200]</td>
+                            <td class="py-2 px-3">—</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3">Badge (status)</td>
+                            <td class="py-2 px-3">bg-[--color-<em>status</em>-600]</td>
+                            <td class="py-2 px-3">text-[--color-<em>status</em>-foreground]</td>
+                            <td class="py-2 px-3">—</td>
+                            <td class="py-2 px-3">—</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 1. Foundations -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                    <h3 class="font-semibold mb-2">Foundations: backgrounds & text</h3>
+                    <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
+                        <li><strong>Base</strong>: <code>bg-[--surface-1] text-[--color-foreground]</code> on <code>&lt;body></code>.
+                        </li>
+                        <li><strong>Elevations</strong>: <code>bg-[--surface-2]</code>, <code>bg-[--surface-3]</code>,
+                            <code>bg-[--surface-4]</code> (cards, popovers, modals).
+                        </li>
+                        <li><strong>Muted text</strong>: <code>text-[--color-muted-foreground]</code> for secondary info
+                            (timestamps, helpers).
+                        </li>
+                        <li><strong>Dividers</strong>: <code>border-[--color-border-soft]</code>; standard frames use
+                            <code>border-[--color-border]</code>.
+                        </li>
+                    </ul>
+                </div>
+                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                    <h3 class="font-semibold mb-2">Don’t fight the theme</h3>
+                    <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
+                        <li>Avoid Tailwind grays (<code>text-gray-*</code>, <code>bg-gray-*</code>)—use tokens so dark
+                            mode works.
+                        </li>
+                        <li>Prefer token scales: <code>*-50/100</code> for subtle fills, <code>*-200/300</code> for
+                            borders, <code>*-600</code> for solid fills.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2. Brand actions -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                    <h3 class="font-semibold mb-2">Primary action</h3>
+                    <p class="text-sm text-[--color-muted-foreground] mb-3">Main CTA or key brand moments.</p>
+                    <button class="px-3 py-2 rounded bg-[--color-primary] text-[--color-primary-foreground] focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
+                        Primary CTA
+                    </button>
+                    <p class="mt-3 text-xs text-[--color-muted-foreground]">Quiet variant: <code>bg-[--color-primary-50]
+                        text-[--color-primary-700] border border-[--color-primary-200]</code></p>
+                </div>
+                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                    <h3 class="font-semibold mb-2">Secondary action</h3>
+                    <p class="text-sm text-[--color-muted-foreground] mb-3">A secondary CTA that’s available but not
+                        dominant.</p>
+                    <button class="px-3 py-2 rounded bg-[--color-secondary] text-[--color-secondary-foreground] focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
+                        Secondary
+                    </button>
+                </div>
+                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                    <h3 class="font-semibold mb-2">Accent & Links</h3>
+                    <p class="text-sm text-[--color-muted-foreground] mb-3">
+                        Accent draws attention (promos, highlights). Links are inline text navigation.
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <span class="inline-block px-2 py-1 rounded bg-[--color-accent] text-[--color-accent-foreground]">Accent chip</span>
+                        <a href="#"
+                           class="underline text-[--color-link] hover:text-[--color-link-hover] visited:text-[--color-link-visited]">Link</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Inputs & focus -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                    <h3 class="font-semibold mb-2">Inputs</h3>
+                    <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
+                        <li>Use <code>border-[--color-border]</code> + <code>bg-[--surface-1]</code> + <code>text-[--color-foreground]</code>.
+                        </li>
+                        <li>Focus with <code>focus:ring-2 focus:ring-[--color-ring]</code>; on small controls use <code>--color-ring</code>.
+                        </li>
+                        <li>Placeholder: <code>placeholder:text-[--color-muted-foreground]</code>.</li>
+                    </ul>
+                    <input class="mt-3 w-full rounded px-3 py-2 bg-[--surface-1] text-[--color-foreground] placeholder:text-[--color-muted-foreground] border border-[--color-border] focus:outline-none focus:ring-2 focus:ring-[--color-ring]"
+                           placeholder="Search..."/>
+                </div>
+                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                    <h3 class="font-semibold mb-2">Overlays & elevation</h3>
+                    <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
+                        <li>Popover: <code>bg-[--surface-3]</code>; Modal: <code>bg-[--surface-4]</code> + page scrim
+                            <code>bg-[--overlay-strong]</code>.
+                        </li>
+                        <li>Dividers inside panels: <code>border-[--color-border-soft]</code>.</li>
+                    </ul>
+                    <div class="mt-3 p-3 rounded border border-[--color-border] bg-[--surface-3]">Popover example</div>
+                </div>
+            </div>
+
+            <!-- 4. Status feedback -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                    <h3 class="font-semibold mb-2">Banners</h3>
+                    <p class="text-sm text-[--color-muted-foreground] mb-3">Use a subtle background + strong text.</p>
+                    <div class="space-y-2">
+                        <div class="rounded border p-2 border-[--color-success-200] bg-[--color-success-100] text-[--color-success-700]">
+                            Success message
+                        </div>
+                        <div class="rounded border p-2 border-[--color-warning-200] bg-[--color-warning-100] text-[--color-warning-700]">
+                            Warning message
+                        </div>
+                        <div class="rounded border p-2 border-[--color-error-200] bg-[--color-error-100] text-[--color-error-700]">
+                            Error message
+                        </div>
+                        <div class="rounded border p-2 border-[--color-info-200] bg-[--color-info-100] text-[--color-info-700]">
+                            Info message
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                    <h3 class="font-semibold mb-2">Badges / pills</h3>
+                    <p class="text-sm text-[--color-muted-foreground] mb-3">Use the strong fill with correct on-color
+                        text.</p>
+                    <div class="flex gap-2">
+                        <span class="px-2 py-1 rounded bg-[--color-success-600] text-[--color-success-foreground]">Success</span>
+                        <span class="px-2 py-1 rounded bg-[--color-warning-600] text-[--color-warning-foreground]">Warning</span>
+                        <span class="px-2 py-1 rounded bg-[--color-error-600] text-[--color-error-foreground]">Error</span>
+                        <span class="px-2 py-1 rounded bg-[--color-info-600] text-[--color-info-foreground]">Info</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Borders -->
+            <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <h3 class="font-semibold mb-2">Borders (which strength?)</h3>
+                <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
+                    <li><strong>Soft</strong> (<code>border-[--color-border-soft]</code>): list dividers, table rows.
+                    </li>
+                    <li><strong>Default</strong> (<code>border-[--color-border]</code>): card frames, inputs.</li>
+                    <li><strong>Strong</strong> (<code>border-[--color-border-strong]</code>): emphasis (alerts, focused
+                        panes).
+                    </li>
+                </ul>
+                <div class="mt-3 flex gap-3">
+                    <div class="w-20 h-10 rounded border border-[--color-border-soft]"></div>
+                    <div class="w-20 h-10 rounded border border-[--color-border]"></div>
+                    <div class="w-20 h-10 rounded border border-[--color-border-strong]"></div>
+                </div>
+            </div>
+
+            <!-- 6. Recipes you can reuse -->
+            <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <h3 class="font-semibold mb-2">Reusable recipes (copy/paste)</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p class="text-[--color-muted-foreground] mb-2">Primary button</p>
+                        <code class="block bg-[--color-muted] p-2 rounded">
+                            class="inline-flex items-center gap-2 rounded px-4 py-2 bg-[--color-primary]
+                            text-[--color-primary-foreground] focus:outline-none focus:ring-2 focus:ring-[--color-ring]
+                            hover:brightness-95 active:brightness-90"
+                        </code>
+                    </div>
+                    <div>
+                        <p class="text-[--color-muted-foreground] mb-2">Quiet button</p>
+                        <code class="block bg-[--color-muted] p-2 rounded">
+                            class="inline-flex items-center gap-2 rounded px-4 py-2 bg-[--color-primary-50]
+                            text-[--color-primary-700] border border-[--color-primary-200]
+                            hover:bg-[--color-primary-100]"
+                        </code>
+                    </div>
+                    <div>
+                        <p class="text-[--color-muted-foreground] mb-2">Input</p>
+                        <code class="block bg-[--color-muted] p-2 rounded">
+                            class="w-full rounded px-3 py-2 bg-[--surface-1] text-[--color-foreground]
+                            placeholder:text-[--color-muted-foreground] border border-[--color-border]
+                            focus:outline-none focus:ring-2 focus:ring-[--color-ring]"
+                        </code>
+                    </div>
+                    <div>
+                        <p class="text-[--color-muted-foreground] mb-2">Card</p>
+                        <code class="block bg-[--color-muted] p-2 rounded">
+                            class="rounded border border-[--color-border] bg-[--surface-2] p-4"
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generated code -->
+        <div class="mt-8 bg-[--surface-1] border rounded-lg shadow-lg p-6 space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-semibold">Generated Tailwind v4 Theme (@theme)</h2>
+                <div class="flex items-center gap-2">
+                    <button id="copy-theme"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm">Copy
+                    </button>
+                    <button id="download-theme"
+                            class="bg-[--surface-1] hover:bg-[--surface-3] text-white px-3 py-1.5 rounded-lg text-sm">
+                        Download CSS
+                    </button>
+                </div>
+            </div>
+            <pre id="generated-code"
+                 class="bg-[--surface-1] text-green-400 p-4 rounded-lg overflow-x-auto text-sm"></pre>
+
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-semibold">Live CSS Variables (for the preview)</h2>
+                <button id="copy-live" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm">
+                    Copy
+                </button>
+            </div>
+            <pre id="live-css-code"
+                 class="bg-[--surface-1] text-green-400 p-4 rounded-lg overflow-x-auto text-sm"></pre>
+        </div>
     </div>
+
+    <!-- TOKENS TAB -->
+    <section id="tab-tokens" class="hidden bg-[--surface-1] border rounded-lg shadow-lg p-6">
+        <header class="flex items-center justify-between gap-3 mb-4">
+            <div>
+                <h2 class="text-2xl font-semibold">All color tokens</h2>
+                <p class="text-sm text-[--color-muted-foreground]">Search, preview, and copy any variable. Groups mirror
+                    a typical design system.</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <input id="token-filter" type="search" placeholder="Filter by name or value…"
+                       class="w-64 max-w-[60vw] rounded px-3 py-1.5 bg-[--surface-1] text-[--color-foreground] border border-[--color-border] focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
+                <label class="text-xs flex items-center gap-2 ml-2">
+                    <input id="toggle-scales" type="checkbox" class="rounded" checked> Show scale tokens (50–950)
+                </label>
+                <button id="expand-all" class="rounded px-3 py-1.5 border bg-[--surface-2] text-sm">Expand all</button>
+                <button id="collapse-all" class="rounded px-3 py-1.5 border bg-[--surface-1] text-sm">Collapse all
+                </button>
+                <button id="copy-token-list" class="rounded px-3 py-1.5 border bg-[--surface-2] text-sm">Copy all
+                    names
+                </button>
+            </div>
+        </header>
+
+        <div id="tokens-count" class="text-xs text-[--color-muted-foreground] mb-3">—</div>
+
+        <!-- Groups get injected here -->
+        <div id="tokens-groups" class="space-y-4"></div>
+    </section>
+
 </div>
 
 <script>
-    // Utility function to convert hex to OKLCH
+    // --------------------------
+    // Color math utils (OKLab/OKLCH)
+    // --------------------------
+    const clamp01 = (x) => Math.min(1, Math.max(0, x));
+
+    function hexToRgb(hex) {
+        return [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+    }
+
+    function rgbToHex([r, g, b]) {
+        const toHex = (c) => Math.round(clamp01(c) * 255).toString(16).padStart(2, '0');
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+    }
+
+    function srgbToLinear(c) {
+        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+    }
+
+    function linearToSrgb(c) {
+        return c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055
+    }
+
+    // hex -> OKLCH
     function hexToOklch(hex) {
-        // First convert hex to linear RGB
-        const r1 = parseInt(hex.slice(1, 3), 16) / 255;
-        const g1 = parseInt(hex.slice(3, 5), 16) / 255;
-        const b1 = parseInt(hex.slice(5, 7), 16) / 255;
+        const [r8, g8, b8] = hexToRgb(hex);
+        const r = srgbToLinear(r8 / 255), g = srgbToLinear(g8 / 255), b = srgbToLinear(b8 / 255);
+        const l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b;
+        const m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b;
+        const s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b;
 
-        // Convert sRGB to linear RGB
-        const toLinear = (c) => c > 0.04045 ? Math.pow((c + 0.055) / 1.055, 2.4) : c / 12.92;
-        const rLin1 = toLinear(r1);
-        const gLin1 = toLinear(g1);
-        const bLin1 = toLinear(b1);
+        const l_ = Math.cbrt(l), m_ = Math.cbrt(m), s_ = Math.cbrt(s);
+        const L = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_;
+        const a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_;
+        const b2 = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_;
 
-        // Convert linear RGB to OKLab
-        const l1 = 0.4122214708 * rLin1 + 0.5363325363 * gLin1 + 0.0514459929 * bLin1;
-        const m1 = 0.2119034982 * rLin1 + 0.6806995451 * gLin1 + 0.1073969566 * bLin1;
-        const s1 = 0.0883024619 * rLin1 + 0.2817188376 * gLin1 + 0.6299787005 * bLin1;
-
-        const l1_ = Math.cbrt(l1);
-        const m1_ = Math.cbrt(m1);
-        const s1_ = Math.cbrt(s1);
-
-        const L1 = 0.2104542553 * l1_ + 0.7936177850 * m1_ - 0.0040720468 * s1_;
-        const a1 = 1.9779984951 * l1_ - 2.4285922050 * m1_ + 0.4505937099 * s1_;
-        const b1_ = 0.0259040371 * l1_ + 0.7827717662 * m1_ - 0.8086757660 * s1_;
-
-        // Convert OKLab to OKLCH
-        const C1 = Math.sqrt(a1 * a1 + b1_ * b1_);
-        let H1 = Math.atan2(b1_, a1) * 180 / Math.PI;
-        if (H1 < 0) H1 += 360;
-
-        return [L1, C1, H1];
+        const C = Math.hypot(a, b2);
+        let H = Math.atan2(b2, a) * 180 / Math.PI;
+        if (H < 0) H += 360;
+        return [L, C, H];
     }
 
-    // Utility function to convert OKLCH to hex
+    // OKLCH -> hex
     function oklchToHex(L, C, H) {
-        // Convert OKLCH to OKLab
         const hRad = H * Math.PI / 180;
-        const a2 = C * Math.cos(hRad);
-        const b2 = C * Math.sin(hRad);
+        const a = C * Math.cos(hRad);
+        const b = C * Math.sin(hRad);
+        const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+        const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+        const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+        const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
 
-        // Convert OKLab to linear RGB
-        const l2_ = L + 0.3963377774 * a2 + 0.2158037573 * b2;
-        const m2_ = L - 0.1055613458 * a2 - 0.0638541728 * b2;
-        const s2_ = L - 0.0894841775 * a2 - 1.2914855480 * b2;
+        let r = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+        let g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+        let b2 = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
 
-        const l2 = l2_ * l2_ * l2_;
-        const m2 = m2_ * m2_ * m2_;
-        const s2 = s2_ * s2_ * s2_;
-
-        let rLin2 = +4.0767416621 * l2 - 3.3077115913 * m2 + 0.2309699292 * s2;
-        let gLin2 = -1.2684380046 * l2 + 2.6097574011 * m2 - 0.3413193965 * s2;
-        let bLin2 = -0.0041960863 * l2 - 0.7034186147 * m2 + 1.7076147010 * s2;
-
-        // Clamp to [0, 1]
-        rLin2 = Math.max(0, Math.min(1, rLin2));
-        gLin2 = Math.max(0, Math.min(1, gLin2));
-        bLin2 = Math.max(0, Math.min(1, bLin2));
-
-        // Convert linear RGB to sRGB
-        const fromLinear = (c) => c > 0.0031308 ? 1.055 * Math.pow(c, 1 / 2.4) - 0.055 : 12.92 * c;
-        const r2 = fromLinear(rLin2);
-        const g2 = fromLinear(gLin2);
-        const b2_ = fromLinear(bLin2);
-
-        // Convert to hex
-        const toHex = (c) => Math.round(Math.max(0, Math.min(255, c * 255))).toString(16).padStart(2, '0');
-        return `#${toHex(r2)}${toHex(g2)}${toHex(b2_)}`;
+        r = linearToSrgb(clamp01(r));
+        g = linearToSrgb(clamp01(g));
+        b2 = linearToSrgb(clamp01(b2));
+        return rgbToHex([r, g, b2]);
     }
 
-    // Convert hex to HSL for reliable color manipulation
+    function formatOklchHex(hex) {
+        const [L, C, H] = hexToOklch(hex);
+        return `oklch(${L.toFixed(5)} ${C.toFixed(5)} ${H.toFixed(1)})`
+    }
+
+    // --------------------------
+    // HSL helpers (for simple UI palette preview)
+    // --------------------------
     function hexToHsl(hex) {
-        const r = parseInt(hex.slice(1, 3), 16) / 255;
-        const g = parseInt(hex.slice(3, 5), 16) / 255;
-        const b = parseInt(hex.slice(5, 7), 16) / 255;
-
-        const max = Math.max(r, g, b);
-        const min = Math.min(r, g, b);
+        let [r, g, b] = hexToRgb(hex).map(v => v / 255);
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
         let h, s, l = (max + min) / 2;
-
         if (max === min) {
-            h = s = 0;
+            h = s = 0
         } else {
             const d = max - min;
             s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
@@ -382,591 +884,965 @@
                 case g:
                     h = (b - r) / d + 2;
                     break;
-                case b:
+                default:
                     h = (r - g) / d + 4;
-                    break;
             }
             h /= 6;
         }
-
         return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
     }
 
-    // Convert HSL to hex
     function hslToHex(h, s, l) {
         l /= 100;
-        const a = s * Math.min(l, 1 - l) / 100;
+        const a = (s / 100) * Math.min(l, 1 - l);
         const f = n => {
             const k = (n + h / 30) % 12;
-            const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-            return Math.round(255 * color).toString(16).padStart(2, '0');
+            const c = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+            return Math.round(c * 255).toString(16).padStart(2, '0');
         };
         return `#${f(0)}${f(8)}${f(4)}`;
     }
 
-    // Contrast helpers for foreground (on-color) tokens
-    function hexToLinear(c) {
-        c = c / 255;
-        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-    }
-
-    function hexLuminance(hex) {
-        const r = hexToLinear(parseInt(hex.slice(1, 3), 16));
-        const g = hexToLinear(parseInt(hex.slice(3, 5), 16));
-        const b = hexToLinear(parseInt(hex.slice(5, 7), 16));
-        // Rec. 709
+    // --------------------------
+    // Contrast helpers (WCAG 2.x)
+    // --------------------------
+    function hexToRelLum(hex) {
+        const [r8, g8, b8] = hexToRgb(hex);
+        const [r, g, b] = [r8, g8, b8].map(v => srgbToLinear(v / 255));
         return 0.2126 * r + 0.7152 * g + 0.0722 * b;
     }
 
-    function getReadableTextColor(hex) {
-        // Returns #000000 or #ffffff based on WCAG contrast heuristic
-        try {
-            const L = hexLuminance(hex);
-            // Contrast with white: (1.05)/(L+0.05); with black: (L+0.05)/0.05
-            const contrastWithWhite = (1.05) / (L + 0.05);
-            const contrastWithBlack = (L + 0.05) / 0.05;
-            return contrastWithWhite >= contrastWithBlack ? '#ffffff' : '#000000';
-        } catch (e) {
-            return '#000000';
-        }
+    function contrastRatio(hex1, hex2) {
+        const L1 = hexToRelLum(hex1), L2 = hexToRelLum(hex2);
+        const [lighter, darker] = L1 >= L2 ? [L1, L2] : [L2, L1];
+        return (lighter + 0.05) / (darker + 0.05);
     }
 
-    // Generate color scale from a base color using HSL for display and OKLCH for output
-    function generateColorScale(baseColor) {
-        const [h, s, l] = hexToHsl(baseColor);
-        const [L, C, H] = hexToOklch(baseColor);
+    function readableOnBackground(bgHex) {
+        // pick black/white with higher contrast
+        const cW = contrastRatio(bgHex, '#ffffff');
+        const cB = contrastRatio(bgHex, '#000000');
+        return cW >= cB ? '#ffffff' : '#000000';
+    }
+
+    // --------------------------
+    // Scales: lightness + tapered chroma
+    // --------------------------
+    const STOPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+
+    function generateColorScale(baseHex) {
+        const [L, C, H] = hexToOklch(baseHex);
+        // target lightness ramp in OKLCH (visually uniform-ish)
+        const tL = {
+            50: 0.98, 100: 0.95, 200: 0.90, 300: 0.80, 400: 0.70,
+            500: L, 600: Math.max(0.35, L - 0.08), 700: Math.max(0.25, L - 0.18),
+            800: Math.max(0.18, L - 0.27), 900: Math.max(0.12, L - 0.36), 950: Math.max(0.08, L - 0.42)
+        };
+        // taper chroma near ends to avoid clipping / samey swatches
+        const Cmax = C;
+        const tC = {
+            50: Cmax * 0.20, 100: Cmax * 0.35, 200: Cmax * 0.55, 300: Cmax * 0.75, 400: Cmax * 0.90,
+            500: Cmax, 600: Cmax * 0.95, 700: Cmax * 0.80, 800: Cmax * 0.60, 900: Cmax * 0.40, 950: Cmax * 0.25
+        };
+
         const scale = {};
-
-        // Better lightness distribution that works for both light and dark base colors
-        const lightnesses = {
-            50: l < 50 ? 95 : Math.max(95, l + (95 - l) * 0.8),
-            100: l < 50 ? 90 : Math.max(90, l + (90 - l) * 0.7),
-            200: l < 50 ? 80 : Math.max(80, l + (80 - l) * 0.6),
-            300: l < 50 ? 70 : Math.max(70, l + (70 - l) * 0.4),
-            400: l < 50 ? 60 : Math.max(60, l + (60 - l) * 0.2),
-            500: l,
-            600: l > 50 ? Math.max(40, l - (l - 40) * 0.2) : Math.max(l - 10, 30),
-            700: l > 50 ? Math.max(30, l - (l - 30) * 0.4) : Math.max(l - 20, 25),
-            800: l > 50 ? Math.max(20, l - (l - 20) * 0.6) : Math.max(l - 30, 20),
-            900: l > 50 ? Math.max(15, l - (l - 15) * 0.8) : Math.max(l - 40, 15),
-            950: l > 50 ? Math.max(10, l - (l - 10) * 0.9) : Math.max(l - 50, 10)
-        };
-
-        // Similar improvements for OKLCH
-        const oklchLightnesses = {
-            50: L < 0.5 ? 0.98 : Math.min(0.98, L + (0.98 - L) * 0.8),
-            100: L < 0.5 ? 0.95 : Math.min(0.95, L + (0.95 - L) * 0.7),
-            200: L < 0.5 ? 0.90 : Math.min(0.90, L + (0.90 - L) * 0.6),
-            300: L < 0.5 ? 0.80 : Math.min(0.80, L + (0.80 - L) * 0.4),
-            400: L < 0.5 ? 0.70 : Math.min(0.70, L + (0.70 - L) * 0.2),
-            500: L,
-            600: L > 0.5 ? Math.max(0.35, L - (L - 0.35) * 0.2) : Math.max(L - 0.08, 0.25),
-            700: L > 0.5 ? Math.max(0.25, L - (L - 0.25) * 0.4) : Math.max(L - 0.15, 0.20),
-            800: L > 0.5 ? Math.max(0.18, L - (L - 0.18) * 0.6) : Math.max(L - 0.25, 0.15),
-            900: L > 0.5 ? Math.max(0.12, L - (L - 0.12) * 0.8) : Math.max(L - 0.35, 0.10),
-            950: L > 0.5 ? Math.max(0.08, L - (L - 0.08) * 0.9) : Math.max(L - 0.45, 0.05)
-        };
-
-        Object.entries(lightnesses).forEach(([key, lightness]) => {
-            const hslColor = `hsl(${h}, ${s}%, ${lightness}%)`;
-            const oklchColor = `oklch(${(oklchLightnesses[key].toFixed(5))} ${C.toFixed(5)} ${H.toFixed(1)})`;
-            scale[key] = {
-                hsl: hslColor,
-                oklch: oklchColor,
-                hex: hslToHex(h, s, lightness)
-            };
+        STOPS.forEach(k => {
+            const hex = oklchToHex(tL[k], tC[k], H);
+            scale[k] = {hex, oklch: `oklch(${tL[k].toFixed(5)} ${tC[k].toFixed(5)} ${H.toFixed(1)})`};
         });
-
         return scale;
     }
 
-    // Update palette display
-    function updatePalette(colorId, containerId) {
-        const color = document.getElementById(colorId).value;
-        const container = document.getElementById(containerId);
-        const scale = generateColorScale(color);
+    // --------------------------
+    // UI rendering
+    // --------------------------
+    const $ = (id) => document.getElementById(id);
+    const inputs = [
+        'light-primary', 'light-secondary', 'light-accent', 'light-link',
+        'dark-primary', 'dark-secondary', 'dark-accent', 'dark-link',
+        'light-background', 'light-foreground',
+        'dark-background', 'dark-foreground',
+        'success', 'warning', 'error', 'info'
+    ];
+    const syncs = ['sync-primary', 'sync-secondary', 'sync-accent', 'sync-link'];
 
-        container.innerHTML = '';
-        Object.entries(scale).forEach(([weight, colorData]) => {
+    function updateLabel(id) {
+        $(id + '-value').textContent = $(id).value;
+    }
+
+    function renderPalette(inputId, containerId) {
+        const hex = $(inputId).value;
+        const scale = generateColorScale(hex);
+        const el = $(containerId);
+        el.innerHTML = '';
+        STOPS.forEach(k => {
             const div = document.createElement('div');
-            div.className = 'palette-item w-full h-8 rounded cursor-pointer';
-            div.style.backgroundColor = colorData.hex;
-            div.title = `${weight}: ${colorData.oklch}`;
-            container.appendChild(div);
+            div.className = 'palette-item w-16 h-8 rounded cursor-pointer border border-gray-200';
+            div.style.backgroundColor = scale[k].hex;
+            div.title = `${k}: ${scale[k].oklch}`;
+            el.appendChild(div);
         });
     }
 
-    // Generate Tailwind theme code
-    function generateThemeCode() {
-        const colors = {
-            lightPrimary: document.getElementById('light-primary').value,
-            lightSecondary: document.getElementById('light-secondary').value,
-            darkPrimary: document.getElementById('dark-primary').value,
-            darkSecondary: document.getElementById('dark-secondary').value,
-            success: document.getElementById('success').value,
-            warning: document.getElementById('warning').value,
-            error: document.getElementById('error').value,
-            info: document.getElementById('info').value,
-        };
+    function syncPair(lightId, darkId, syncId) {
+        if ($(syncId).checked) {
+            $(darkId).value = $(lightId).value;
+            updateLabel(darkId);
+            triggerRender();
+        }
+    }
 
-        const primaryScale = generateColorScale(colors.lightPrimary);
-        const secondaryScale = generateColorScale(colors.lightSecondary);
-        const darkPrimaryScale = generateColorScale(colors.darkPrimary);
-        const darkSecondaryScale = generateColorScale(colors.darkSecondary);
+    // --------------------------
+    // Theme code generation
+    // --------------------------
+    function themeFromUI() {
+        // ensure sync boxes apply
+        syncPair('light-primary', 'dark-primary', 'sync-primary');
+        syncPair('light-secondary', 'dark-secondary', 'sync-secondary');
+        syncPair('light-accent', 'dark-accent', 'sync-accent');
+        syncPair('light-link', 'dark-link', 'sync-link');
 
-        // Status scales
-        const successScale = generateColorScale(colors.success);
-        const warningScale = generateColorScale(colors.warning);
-        const errorScale = generateColorScale(colors.error);
-        const infoScale = generateColorScale(colors.info);
+        const c = Object.fromEntries(inputs.map(id => [id, $(id).value]));
 
-        // Foreground tokens for contrast
-        const primaryFg = getReadableTextColor(primaryScale[600].hex);
-        const secondaryFg = getReadableTextColor(secondaryScale[600].hex);
-        const successFg = getReadableTextColor(successScale[600].hex);
-        const warningFg = getReadableTextColor(warningScale[600].hex);
-        const errorFg = getReadableTextColor(errorScale[600].hex);
-        const infoFg = getReadableTextColor(infoScale[600].hex);
+        const primaryScaleL = generateColorScale(c['light-primary']);
+        const secondaryScaleL = generateColorScale(c['light-secondary']);
+        const accentScaleL = generateColorScale(c['light-accent']);
+        const linkScaleL = generateColorScale(c['light-link']);
 
-        const darkPrimaryFg = getReadableTextColor(darkPrimaryScale[600].hex);
-        const darkSecondaryFg = getReadableTextColor(darkSecondaryScale[600].hex);
+        const primaryScaleD = generateColorScale(c['dark-primary']);
+        const secondaryScaleD = generateColorScale(c['dark-secondary']);
+        const accentScaleD = generateColorScale(c['dark-accent']);
+        const linkScaleD = generateColorScale(c['dark-link']);
 
-        const themeCode = `@import "tailwindcss";
+        const successScale = generateColorScale(c['success']);
+        const warningScale = generateColorScale(c['warning']);
+        const errorScale = generateColorScale(c['error']);
+        const infoScale = generateColorScale(c['info']);
+
+        // on-color text based on 600 (or 500 in dark)
+        const onPrimaryL = readableOnBackground(primaryScaleL[600].hex);
+        const onSecondaryL = readableOnBackground(secondaryScaleL[600].hex);
+        const onAccentL = readableOnBackground(accentScaleL[600].hex);
+        const onLinkL = readableOnBackground(linkScaleL[600].hex);
+
+        const onPrimaryD = readableOnBackground(primaryScaleD[500].hex);
+        const onSecondaryD = readableOnBackground(secondaryScaleD[500].hex);
+        const onAccentD = readableOnBackground(accentScaleD[500].hex);
+        const onLinkD = readableOnBackground(linkScaleD[500].hex);
+
+        const onSuccess = readableOnBackground(successScale[600].hex);
+        const onWarning = readableOnBackground(warningScale[600].hex);
+        const onError = readableOnBackground(errorScale[600].hex);
+        const onInfo = readableOnBackground(infoScale[600].hex);
+
+        // neutrals
+        const lightNeutral = generateColorScale(c['light-foreground']);
+        const darkNeutral = generateColorScale(c['dark-foreground']);
+
+        // helpers
+        const lines = (name, scale) => STOPS.map(k => `  --color-${name}-${k}: ${scale[k].oklch};`).join('\n');
+        const base = (name, scale) => `  --color-${name}: ${scale[500].oklch};`;
+
+        const theme = `@import "tailwindcss";
 
 @theme {
-  --color-primary: ${primaryScale[500].oklch};
-  --color-primary-50: ${primaryScale[50].oklch};
-  --color-primary-100: ${primaryScale[100].oklch};
-  --color-primary-200: ${primaryScale[200].oklch};
-  --color-primary-300: ${primaryScale[300].oklch};
-  --color-primary-400: ${primaryScale[400].oklch};
-  --color-primary-500: ${primaryScale[500].oklch};
-  --color-primary-600: ${primaryScale[600].oklch};
-  --color-primary-700: ${primaryScale[700].oklch};
-  --color-primary-800: ${primaryScale[800].oklch};
-  --color-primary-900: ${primaryScale[900].oklch};
-  --color-primary-950: ${primaryScale[950].oklch};
-  --color-primary-content: ${primaryFg};
+${base('primary', primaryScaleL)}
+${lines('primary', primaryScaleL)}
+  --color-primary-foreground: ${onPrimaryL};
 
-  --color-secondary: ${secondaryScale[500].oklch};
-  --color-secondary-50: ${secondaryScale[50].oklch};
-  --color-secondary-100: ${secondaryScale[100].oklch};
-  --color-secondary-200: ${secondaryScale[200].oklch};
-  --color-secondary-300: ${secondaryScale[300].oklch};
-  --color-secondary-400: ${secondaryScale[400].oklch};
-  --color-secondary-500: ${secondaryScale[500].oklch};
-  --color-secondary-600: ${secondaryScale[600].oklch};
-  --color-secondary-700: ${secondaryScale[700].oklch};
-  --color-secondary-800: ${secondaryScale[800].oklch};
-  --color-secondary-900: ${secondaryScale[900].oklch};
-  --color-secondary-950: ${secondaryScale[950].oklch};
-  --color-secondary-content: ${secondaryFg};
+${base('secondary', secondaryScaleL)}
+${lines('secondary', secondaryScaleL)}
+  --color-secondary-foreground: ${onSecondaryL};
+
+${base('accent', accentScaleL)}
+${lines('accent', accentScaleL)}
+  --color-accent-foreground: ${onAccentL};
+
+  --color-link: ${linkScaleL[600].oklch};
+  --color-link-hover: ${linkScaleL[700].oklch};
+  --color-link-visited: oklch(${(hexToOklch(c['light-link'])[0] * 0.85).toFixed(5)} ${(hexToOklch(c['light-link'])[1] * 0.6).toFixed(5)} ${(hexToOklch(c['light-link'])[2] + 30).toFixed(1)});
+  --color-link-foreground: ${onLinkL};
 
   --color-success: ${successScale[500].oklch};
-  --color-success-50: ${successScale[50].oklch};
-  --color-success-100: ${successScale[100].oklch};
-  --color-success-200: ${successScale[200].oklch};
-  --color-success-300: ${successScale[300].oklch};
-  --color-success-400: ${successScale[400].oklch};
-  --color-success-500: ${successScale[500].oklch};
-  --color-success-600: ${successScale[600].oklch};
-  --color-success-700: ${successScale[700].oklch};
-  --color-success-800: ${successScale[800].oklch};
-  --color-success-900: ${successScale[900].oklch};
-  --color-success-950: ${successScale[950].oklch};
-  --color-success-content: ${successFg};
+${lines('success', successScale)}
+  --color-success-foreground: ${onSuccess};
 
   --color-warning: ${warningScale[500].oklch};
-  --color-warning-50: ${warningScale[50].oklch};
-  --color-warning-100: ${warningScale[100].oklch};
-  --color-warning-200: ${warningScale[200].oklch};
-  --color-warning-300: ${warningScale[300].oklch};
-  --color-warning-400: ${warningScale[400].oklch};
-  --color-warning-500: ${warningScale[500].oklch};
-  --color-warning-600: ${warningScale[600].oklch};
-  --color-warning-700: ${warningScale[700].oklch};
-  --color-warning-800: ${warningScale[800].oklch};
-  --color-warning-900: ${warningScale[900].oklch};
-  --color-warning-950: ${warningScale[950].oklch};
-  --color-warning-content: ${warningFg};
+${lines('warning', warningScale)}
+  --color-warning-foreground: ${onWarning};
 
   --color-error: ${errorScale[500].oklch};
-  --color-error-50: ${errorScale[50].oklch};
-  --color-error-100: ${errorScale[100].oklch};
-  --color-error-200: ${errorScale[200].oklch};
-  --color-error-300: ${errorScale[300].oklch};
-  --color-error-400: ${errorScale[400].oklch};
-  --color-error-500: ${errorScale[500].oklch};
-  --color-error-600: ${errorScale[600].oklch};
-  --color-error-700: ${errorScale[700].oklch};
-  --color-error-800: ${errorScale[800].oklch};
-  --color-error-900: ${errorScale[900].oklch};
-  --color-error-950: ${errorScale[950].oklch};
-  --color-error-content: ${errorFg};
+${lines('error', errorScale)}
+  --color-error-foreground: ${onError};
 
   --color-info: ${infoScale[500].oklch};
-  --color-info-50: ${infoScale[50].oklch};
-  --color-info-100: ${infoScale[100].oklch};
-  --color-info-200: ${infoScale[200].oklch};
-  --color-info-300: ${infoScale[300].oklch};
-  --color-info-400: ${infoScale[400].oklch};
-  --color-info-500: ${infoScale[500].oklch};
-  --color-info-600: ${infoScale[600].oklch};
-  --color-info-700: ${infoScale[700].oklch};
-  --color-info-800: ${infoScale[800].oklch};
-  --color-info-900: ${infoScale[900].oklch};
-  --color-info-950: ${infoScale[950].oklch};
-  --color-info-content: ${infoFg};
+${lines('info', infoScale)}
+  --color-info-foreground: ${onInfo};
 
   /* Semantic neutrals (light) */
-  --color-background: #ffffff;
-  --color-content: #0a0a0a;
-  --color-muted: ${secondaryScale[100].oklch};
-  --color-muted-content: ${secondaryScale[700].oklch};
-  --color-card: #ffffff;
-  --color-card-content: #0a0a0a;
-  --color-border: ${secondaryScale[200].oklch};
-  --color-input: ${secondaryScale[200].oklch};
-  --color-ring: ${primaryScale[600].oklch};
+  --color-background: ${formatOklchHex(c['light-background'])};
+  --color-foreground: ${formatOklchHex(c['light-foreground'])};
+  --color-muted: ${lightNeutral[100].oklch};
+  --color-muted-foreground: ${lightNeutral[700].oklch};
+  --color-border-soft: ${lightNeutral[200].oklch};
+  --color-border: ${lightNeutral[300].oklch};
+  --color-border-strong: ${lightNeutral[500].oklch};
+
+  /* States & focus */
+  --color-ring: ${primaryScaleL[600].oklch};
+  --overlay-weak: oklch(0 0 0 / 0.20);
+  --overlay-strong: oklch(0 0 0 / 0.40);
+
+  /* Surfaces (light) */
+  --surface-1: var(--color-background);
+  --surface-2: color-mix(in oklch, var(--color-background), black 3%);
+  --surface-3: color-mix(in oklch, var(--color-background), black 6%);
+  --surface-4: color-mix(in oklch, var(--color-background), black 9%);
 }
 :root { color-scheme: light; }
 
 :root[data-theme="dark"] {
-  --color-primary: ${darkPrimaryScale[500].oklch};
-  --color-primary-50: ${darkPrimaryScale[50].oklch};
-  --color-primary-100: ${darkPrimaryScale[100].oklch};
-  --color-primary-200: ${darkPrimaryScale[200].oklch};
-  --color-primary-300: ${darkPrimaryScale[300].oklch};
-  --color-primary-400: ${darkPrimaryScale[400].oklch};
-  --color-primary-500: ${darkPrimaryScale[500].oklch};
-  --color-primary-600: ${darkPrimaryScale[600].oklch};
-  --color-primary-700: ${darkPrimaryScale[700].oklch};
-  --color-primary-800: ${darkPrimaryScale[800].oklch};
-  --color-primary-900: ${darkPrimaryScale[900].oklch};
-  --color-primary-950: ${darkPrimaryScale[950].oklch};
-  --color-primary-content: ${darkPrimaryFg};
+${base('primary', primaryScaleD)}
+${lines('primary', primaryScaleD)}
+  --color-primary-foreground: ${onPrimaryD};
 
-  --color-secondary: ${darkSecondaryScale[500].oklch};
-  --color-secondary-50: ${darkSecondaryScale[50].oklch};
-  --color-secondary-100: ${darkSecondaryScale[100].oklch};
-  --color-secondary-200: ${darkSecondaryScale[200].oklch};
-  --color-secondary-300: ${darkSecondaryScale[300].oklch};
-  --color-secondary-400: ${darkSecondaryScale[400].oklch};
-  --color-secondary-500: ${darkSecondaryScale[500].oklch};
-  --color-secondary-600: ${darkSecondaryScale[600].oklch};
-  --color-secondary-700: ${darkSecondaryScale[700].oklch};
-  --color-secondary-800: ${darkSecondaryScale[800].oklch};
-  --color-secondary-900: ${darkSecondaryScale[900].oklch};
-  --color-secondary-950: ${darkSecondaryScale[950].oklch};
-  --color-secondary-content: ${darkSecondaryFg};
+${base('secondary', secondaryScaleD)}
+${lines('secondary', secondaryScaleD)}
+  --color-secondary-foreground: ${onSecondaryD};
+
+${base('accent', accentScaleD)}
+${lines('accent', accentScaleD)}
+  --color-accent-foreground: ${onAccentD};
+
+  --color-link: ${linkScaleD[400].oklch};
+  --color-link-hover: ${linkScaleD[300].oklch};
+  --color-link-visited: oklch(${(hexToOklch(c['dark-link'])[0] * 0.9).toFixed(5)} ${(hexToOklch(c['dark-link'])[1] * 0.6).toFixed(5)} ${(hexToOklch(c['dark-link'])[2] + 30).toFixed(1)});
+  --color-link-foreground: ${onLinkD};
 
   /* Semantic neutrals (dark) */
-  --color-background: #0a0a0a;
-  --color-content: #fafafa;
-  --color-muted: ${darkSecondaryScale[800].oklch};
-  --color-muted-content: ${darkSecondaryScale[300].oklch};
-  --color-card: #0a0a0a;
-  --color-card-content: #fafafa;
-  --color-border: ${darkSecondaryScale[700].oklch};
-  --color-input: ${darkSecondaryScale[700].oklch};
-  --color-ring: ${darkPrimaryScale[500].oklch};
+  --color-background: ${formatOklchHex(c['dark-background'])};
+  --color-foreground: ${formatOklchHex(c['dark-foreground'])};
+  --color-muted: ${darkNeutral[800].oklch};
+  --color-muted-foreground: ${darkNeutral[300].oklch};
+  --color-border-soft: ${darkNeutral[400].oklch};
+  --color-border: ${darkNeutral[600].oklch};
+  --color-border-strong: ${darkNeutral[700].oklch};
+
+  --color-success: ${successScale[500].oklch};
+${lines('success', successScale)}
+  --color-success-foreground: ${onSuccess};
+
+  --color-warning: ${warningScale[500].oklch};
+${lines('warning', warningScale)}
+  --color-warning-foreground: ${onWarning};
+
+  --color-error: ${errorScale[500].oklch};
+${lines('error', errorScale)}
+  --color-error-foreground: ${onError};
+
+  --color-info: ${infoScale[500].oklch};
+${lines('info', infoScale)}
+  --color-info-foreground: ${onInfo};
+
+  /* States & focus */
+  --color-ring: ${primaryScaleD[400].oklch};
+  --overlay-weak: oklch(1 0 0 / 0.15);
+  --overlay-strong: oklch(1 0 0 / 0.30);
+
+  /* Surfaces (dark) */
+  --surface-1: var(--color-background);
+  --surface-2: color-mix(in oklch, var(--color-background), white 4%);
+  --surface-3: color-mix(in oklch, var(--color-background), white 7%);
+  --surface-4: color-mix(in oklch, var(--color-background), white 10%);
 }
 
 :root[data-theme="dark"] { color-scheme: dark; }`;
 
-        document.getElementById('generated-code').textContent = themeCode;
+        // Live CSS for preview panel (no @theme wrapper, just :root vars)
+        const liveCss = theme
+            .split('@theme {')[1]
+            ?.split('}\n:root { color-scheme: light; }')[0]
+            ?.trim();
+        const liveCssFull = `:root {\n${liveCss}\n}\n:root[data-theme="dark"] {\n${theme.split(':root[data-theme="dark"] {')[1]?.split('}\n\n:root[data-theme="dark"] { color-scheme: dark; }')[0]}\n}`;
 
-        const liveCss = `
-:root {
-  --color-primary: ${primaryScale[500].oklch};
-  --color-primary-50: ${primaryScale[50].oklch};
-  --color-primary-100: ${primaryScale[100].oklch};
-  --color-primary-200: ${primaryScale[200].oklch};
-  --color-primary-300: ${primaryScale[300].oklch};
-  --color-primary-400: ${primaryScale[400].oklch};
-  --color-primary-500: ${primaryScale[500].oklch};
-  --color-primary-600: ${primaryScale[600].oklch};
-  --color-primary-700: ${primaryScale[700].oklch};
-  --color-primary-800: ${primaryScale[800].oklch};
-  --color-primary-900: ${primaryScale[900].oklch};
-  --color-primary-950: ${primaryScale[950].oklch};
-  --color-primary-content: ${primaryFg};
-
-  --color-secondary: ${secondaryScale[500].oklch};
-  --color-secondary-50: ${secondaryScale[50].oklch};
-  --color-secondary-100: ${secondaryScale[100].oklch};
-  --color-secondary-200: ${secondaryScale[200].oklch};
-  --color-secondary-300: ${secondaryScale[300].oklch};
-  --color-secondary-400: ${secondaryScale[400].oklch};
-  --color-secondary-500: ${secondaryScale[500].oklch};
-  --color-secondary-600: ${secondaryScale[600].oklch};
-  --color-secondary-700: ${secondaryScale[700].oklch};
-  --color-secondary-800: ${secondaryScale[800].oklch};
-  --color-secondary-900: ${secondaryScale[900].oklch};
-  --color-secondary-950: ${secondaryScale[950].oklch};
-  --color-secondary-content: ${secondaryFg};
-
-  --color-success: ${successScale[500].oklch};
-  --color-success-50: ${successScale[50].oklch};
-  --color-success-100: ${successScale[100].oklch};
-  --color-success-200: ${successScale[200].oklch};
-  --color-success-300: ${successScale[300].oklch};
-  --color-success-400: ${successScale[400].oklch};
-  --color-success-500: ${successScale[500].oklch};
-  --color-success-600: ${successScale[600].oklch};
-  --color-success-700: ${successScale[700].oklch};
-  --color-success-800: ${successScale[800].oklch};
-  --color-success-900: ${successScale[900].oklch};
-  --color-success-950: ${successScale[950].oklch};
-  --color-success-content: ${successFg};
-
-  --color-warning: ${warningScale[500].oklch};
-  --color-warning-50: ${warningScale[50].oklch};
-  --color-warning-100: ${warningScale[100].oklch};
-  --color-warning-200: ${warningScale[200].oklch};
-  --color-warning-300: ${warningScale[300].oklch};
-  --color-warning-400: ${warningScale[400].oklch};
-  --color-warning-500: ${warningScale[500].oklch};
-  --color-warning-600: ${warningScale[600].oklch};
-  --color-warning-700: ${warningScale[700].oklch};
-  --color-warning-800: ${warningScale[800].oklch};
-  --color-warning-900: ${warningScale[900].oklch};
-  --color-warning-950: ${warningScale[950].oklch};
-  --color-warning-content: ${warningFg};
-
-  --color-error: ${errorScale[500].oklch};
-  --color-error-50: ${errorScale[50].oklch};
-  --color-error-100: ${errorScale[100].oklch};
-  --color-error-200: ${errorScale[200].oklch};
-  --color-error-300: ${errorScale[300].oklch};
-  --color-error-400: ${errorScale[400].oklch};
-  --color-error-500: ${errorScale[500].oklch};
-  --color-error-600: ${errorScale[600].oklch};
-  --color-error-700: ${errorScale[700].oklch};
-  --color-error-800: ${errorScale[800].oklch};
-  --color-error-900: ${errorScale[900].oklch};
-  --color-error-950: ${errorScale[950].oklch};
-  --color-error-content: ${errorFg};
-
-  --color-info: ${infoScale[500].oklch};
-  --color-info-50: ${infoScale[50].oklch};
-  --color-info-100: ${infoScale[100].oklch};
-  --color-info-200: ${infoScale[200].oklch};
-  --color-info-300: ${infoScale[300].oklch};
-  --color-info-400: ${infoScale[400].oklch};
-  --color-info-500: ${infoScale[500].oklch};
-  --color-info-600: ${infoScale[600].oklch};
-  --color-info-700: ${infoScale[700].oklch};
-  --color-info-800: ${infoScale[800].oklch};
-  --color-info-900: ${infoScale[900].oklch};
-  --color-info-950: ${infoScale[950].oklch};
-  --color-info-content: ${infoFg};
-
-  --color-background: #ffffff;
-  --color-content: #0a0a0a;
-  --color-muted: ${secondaryScale[100].oklch};
-  --color-muted-content: ${secondaryScale[700].oklch};
-  --color-card: #ffffff;
-  --color-card-content: #0a0a0a;
-  --color-border: ${secondaryScale[200].oklch};
-  --color-input: ${secondaryScale[200].oklch};
-  --color-ring: ${primaryScale[600].oklch};
-}
-:root[data-theme="dark"] {
-  --color-primary: ${darkPrimaryScale[500].oklch};
-  --color-primary-50: ${darkPrimaryScale[50].oklch};
-  --color-primary-100: ${darkPrimaryScale[100].oklch};
-  --color-primary-200: ${darkPrimaryScale[200].oklch};
-  --color-primary-300: ${darkPrimaryScale[300].oklch};
-  --color-primary-400: ${darkPrimaryScale[400].oklch};
-  --color-primary-500: ${darkPrimaryScale[500].oklch};
-  --color-primary-600: ${darkPrimaryScale[600].oklch};
-  --color-primary-700: ${darkPrimaryScale[700].oklch};
-  --color-primary-800: ${darkPrimaryScale[800].oklch};
-  --color-primary-900: ${darkPrimaryScale[900].oklch};
-  --color-primary-950: ${darkPrimaryScale[950].oklch};
-  --color-primary-content: ${darkPrimaryFg};
-
-  --color-secondary: ${darkSecondaryScale[500].oklch};
-  --color-secondary-50: ${darkSecondaryScale[50].oklch};
-  --color-secondary-100: ${darkSecondaryScale[100].oklch};
-  --color-secondary-200: ${darkSecondaryScale[200].oklch};
-  --color-secondary-300: ${darkSecondaryScale[300].oklch};
-  --color-secondary-400: ${darkSecondaryScale[400].oklch};
-  --color-secondary-500: ${darkSecondaryScale[500].oklch};
-  --color-secondary-600: ${darkSecondaryScale[600].oklch};
-  --color-secondary-700: ${darkSecondaryScale[700].oklch};
-  --color-secondary-800: ${darkSecondaryScale[800].oklch};
-  --color-secondary-900: ${darkSecondaryScale[900].oklch};
-  --color-secondary-950: ${darkSecondaryScale[950].oklch};
-  --color-secondary-content: ${darkSecondaryFg};
-
-  --color-success: ${successScale[500].oklch};
-  --color-success-50: ${successScale[50].oklch};
-  --color-success-100: ${successScale[100].oklch};
-  --color-success-200: ${successScale[200].oklch};
-  --color-success-300: ${successScale[300].oklch};
-  --color-success-400: ${successScale[400].oklch};
-  --color-success-500: ${successScale[500].oklch};
-  --color-success-600: ${successScale[600].oklch};
-  --color-success-700: ${successScale[700].oklch};
-  --color-success-800: ${successScale[800].oklch};
-  --color-success-900: ${successScale[900].oklch};
-  --color-success-950: ${successScale[950].oklch};
-  --color-success-content: ${successFg};
-
-  --color-warning: ${warningScale[500].oklch};
-  --color-warning-50: ${warningScale[50].oklch};
-  --color-warning-100: ${warningScale[100].oklch};
-  --color-warning-200: ${warningScale[200].oklch};
-  --color-warning-300: ${warningScale[300].oklch};
-  --color-warning-400: ${warningScale[400].oklch};
-  --color-warning-500: ${warningScale[500].oklch};
-  --color-warning-600: ${warningScale[600].oklch};
-  --color-warning-700: ${warningScale[700].oklch};
-  --color-warning-800: ${warningScale[800].oklch};
-  --color-warning-900: ${warningScale[900].oklch};
-  --color-warning-950: ${warningScale[950].oklch};
-  --color-warning-content: ${warningFg};
-
-  --color-error: ${errorScale[500].oklch};
-  --color-error-50: ${errorScale[50].oklch};
-  --color-error-100: ${errorScale[100].oklch};
-  --color-error-200: ${errorScale[200].oklch};
-  --color-error-300: ${errorScale[300].oklch};
-  --color-error-400: ${errorScale[400].oklch};
-  --color-error-500: ${errorScale[500].oklch};
-  --color-error-600: ${errorScale[600].oklch};
-  --color-error-700: ${errorScale[700].oklch};
-  --color-error-800: ${errorScale[800].oklch};
-  --color-error-900: ${errorScale[900].oklch};
-  --color-error-950: ${errorScale[950].oklch};
-  --color-error-content: ${errorFg};
-
-  --color-info: ${infoScale[500].oklch};
-  --color-info-50: ${infoScale[50].oklch};
-  --color-info-100: ${infoScale[100].oklch};
-  --color-info-200: ${infoScale[200].oklch};
-  --color-info-300: ${infoScale[300].oklch};
-  --color-info-400: ${infoScale[400].oklch};
-  --color-info-500: ${infoScale[500].oklch};
-  --color-info-600: ${infoScale[600].oklch};
-  --color-info-700: ${infoScale[700].oklch};
-  --color-info-800: ${infoScale[800].oklch};
-  --color-info-900: ${infoScale[900].oklch};
-  --color-info-950: ${infoScale[950].oklch};
-  --color-info-content: ${infoFg};
-
-  --color-background: #0a0a0a;
-  --color-content: #fafafa;
-  --color-muted: ${darkSecondaryScale[800].oklch};
-  --color-muted-content: ${darkSecondaryScale[300].oklch};
-  --color-card: #0a0a0a;
-  --color-card-content: #fafafa;
-  --color-border: ${darkSecondaryScale[700].oklch};
-  --color-input: ${darkSecondaryScale[700].oklch};
-  --color-ring: ${darkPrimaryScale[500].oklch};
-}`;
-
-        const styleEl = document.getElementById('live-theme-vars');
-        if (styleEl) styleEl.textContent = liveCss;
+        return {theme, liveCssFull};
     }
 
+    function renderContrastTable() {
+        const bgL = $('light-background').value;
+        const fgL = $('light-foreground').value;
+        const bgD = $('dark-background').value;
+        const fgD = $('dark-foreground').value;
 
-    // Update color value display
-    function updateColorValue(inputId) {
-        const input = document.getElementById(inputId);
-        const valueSpan = document.getElementById(inputId + '-value');
-        valueSpan.textContent = input.value;
-    }
+        const priL = $('light-primary').value;
+        const secL = $('light-secondary').value;
+        const accL = $('light-accent').value;
 
-    // Initialize event listeners
-    document.addEventListener('DOMContentLoaded', function () {
-        const colorInputs = [
-            'light-primary', 'light-secondary', 'dark-primary', 'dark-secondary',
-            'success', 'warning', 'error', 'info'
+        const priD = $('dark-primary').value;
+        const secD = $('dark-secondary').value;
+        const accD = $('dark-accent').value;
+
+        const rows = [
+            ['Light content on background', fgL, bgL],
+            ['Dark content on background', fgD, bgD],
+            ['Primary content (on primary, light)', readableOnBackground(priL), priL],
+            ['Secondary content (on secondary, light)', readableOnBackground(secL), secL],
+            ['Accent content (on accent, light)', readableOnBackground(accL), accL],
+            ['Primary content (on primary, dark)', readableOnBackground(priD), priD],
+            ['Secondary content (on secondary, dark)', readableOnBackground(secD), secD],
+            ['Accent content (on accent, dark)', readableOnBackground(accD), accD],
         ];
+        const html = `
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left border-b">
+            <th class="py-2 pr-4">Pair</th>
+            <th class="py-2 pr-4">Contrast</th>
+            <th class="py-2 pr-4">Pass</th>
+            <th class="py-2">Sample</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(([label, fg, bg]) => {
+            const ratio = contrastRatio(fg, bg);
+            const passAA = ratio >= 4.5 ? 'AA' : (ratio >= 3 ? 'AA Large' : '—');
+            const passAAA = ratio >= 7 ? 'AAA' : '—';
+            const chip = `<span class="inline-block px-2 py-0.5 rounded bg-[--surface-3]">${ratio.toFixed(2)}:1</span>`;
+            return `
+              <tr class="border-b last:border-0">
+                <td class="py-2 pr-4">${label}</td>
+                <td class="py-2 pr-4">${chip}</td>
+                <td class="py-2 pr-4">
+                  <span class="inline-flex gap-2">
+                    <span class="px-2 py-0.5 rounded ${passAA !== '—' ? 'bg-green-100 text-green-800' : 'bg-[--surface-3] text-[--color-foreground]'}">${passAA}</span>
+                    <span class="px-2 py-0.5 rounded ${passAAA !== '—' ? 'bg-green-100 text-green-800' : 'bg-[--surface-3] text-[--color-foreground]'}">${passAAA}</span>
+                  </span>
+                </td>
+                <td class="py-2">
+                  <span class="inline-flex items-center justify-center px-3 py-1 rounded"
+                        style="color:${fg}; background:${bg}; border:1px solid #e5e7eb">Aa</span>
+                </td>
+              </tr>`;
+        }).join('')}
+        </tbody>
+      </table>`;
+        $('contrast-table').innerHTML = html;
+    }
 
-        colorInputs.forEach(inputId => {
-            const input = document.getElementById(inputId);
-            input.addEventListener('input', function () {
-                updateColorValue(inputId);
+    // --------------------------
+    // Render all
+    // --------------------------
+    let renderReq;
 
-                // Update corresponding palettes
-                if (inputId === 'light-primary') {
-                    updatePalette(inputId, 'light-primary-palette');
-                } else if (inputId === 'light-secondary') {
-                    updatePalette(inputId, 'light-secondary-palette');
-                } else if (inputId === 'dark-primary') {
-                    updatePalette(inputId, 'dark-primary-palette');
-                } else if (inputId === 'dark-secondary') {
-                    updatePalette(inputId, 'dark-secondary-palette');
-                } else if (inputId === 'success') {
-                    document.getElementById('success-single').style.backgroundColor = input.value;
-                    document.getElementById('success-single-dark').style.backgroundColor = input.value;
-                } else if (inputId === 'warning') {
-                    document.getElementById('warning-single').style.backgroundColor = input.value;
-                    document.getElementById('warning-single-dark').style.backgroundColor = input.value;
-                } else if (inputId === 'error') {
-                    document.getElementById('error-single').style.backgroundColor = input.value;
-                    document.getElementById('error-single-dark').style.backgroundColor = input.value;
-                } else if (inputId === 'info') {
-                    document.getElementById('info-single').style.backgroundColor = input.value;
-                    document.getElementById('info-single-dark').style.backgroundColor = input.value;
-                }
+    function triggerRender() {
+        cancelAnimationFrame(renderReq);
+        renderReq = requestAnimationFrame(() => {
+            // palettes
+            renderPalette('light-primary', 'light-primary-palette');
+            renderPalette('light-secondary', 'light-secondary-palette');
+            renderPalette('light-accent', 'light-accent-palette');
+            renderPalette('dark-primary', 'dark-primary-palette');
+            renderPalette('dark-secondary', 'dark-secondary-palette');
+            renderPalette('dark-accent', 'dark-accent-palette');
 
-                generateThemeCode();
+            // single status swatches
+            ['success', 'warning', 'error', 'info'].forEach(id => {
+                $('' + id + '-single').style.backgroundColor = $(id).value;
+                $('' + id + '-single-dark').style.backgroundColor = $(id).value;
+            });
+
+            // theme + live css
+            const {theme, liveCssFull} = themeFromUI();
+            $('generated-code').textContent = theme;
+            $('live-css-code').textContent = liveCssFull;
+            $('live-theme-vars').textContent = liveCssFull;
+
+            // contrast table
+            renderContrastTable();
+            if (!$('tab-tokens').classList.contains('hidden')) {
+                renderTokensGroups();
+            }
+        });
+    }
+
+    // --------------------------
+    // Events
+    // --------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+        // load theme pref
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const mode = stored ?? (prefersDark ? 'dark' : 'light');
+        setTheme(mode);
+
+        // inputs
+        inputs.forEach(id => {
+            updateLabel(id);
+            $(id).addEventListener('input', () => {
+                updateLabel(id);
+                triggerRender();
+            });
+        });
+        // sync checkboxes
+        syncs.forEach(id => {
+            $(id).addEventListener('change', triggerRender);
+        });
+
+        // copy/download
+        $('copy-theme').addEventListener('click', () => copyText($('generated-code').textContent));
+        $('copy-live').addEventListener('click', () => copyText($('live-css-code').textContent));
+        $('download-theme').addEventListener('click', () => downloadFile('theme.css', $('generated-code').textContent));
+
+        // dark toggle
+        $('theme-toggle').addEventListener('click', toggleTheme);
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === '/') {
+                e.preventDefault();
+                toggleTheme();
+            }
+        });
+
+        // initial render
+        triggerRender();
+        setupTokensTab();
+    });
+
+    function copyText(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            toast('Copied to clipboard');
+        }).catch(() => alert('Failed to copy'));
+    }
+
+    function downloadFile(name, content) {
+        const blob = new Blob([content], {type: 'text/css'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function toast(msg) {
+        const t = document.createElement('div');
+        t.textContent = msg;
+        t.className = 'fixed bottom-4 right-4 bg-[--surface-1] text-white text-sm px-3 py-1.5 rounded shadow';
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 1500);
+    }
+
+    function setTheme(mode) {
+        const r = document.documentElement;
+        if (mode === 'dark') {
+            r.setAttribute('data-theme', 'dark');
+            r.style.colorScheme = 'dark';
+            $('theme-toggle').setAttribute('aria-pressed', 'true');
+            $('theme-toggle-label').textContent = 'Light mode';
+        } else {
+            r.removeAttribute('data-theme');
+            r.style.colorScheme = 'light';
+            $('theme-toggle').setAttribute('aria-pressed', 'false');
+            $('theme-toggle-label').textContent = 'Dark mode';
+        }
+        localStorage.setItem('theme', mode);
+    }
+
+    function toggleTheme() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(isDark ? 'light' : 'dark');
+    }
+
+    // ---------- TOKENS TAB LOGIC ----------
+
+    // Parse all "--var: value;" pairs from the live CSS you inject
+    // ---------- Token parsing & color resolving (re-use from your previous answer) ----------
+    function parseTokensFromLiveCSS() {
+        const css = $('live-theme-vars').textContent || '';
+        const map = new Map();
+        const re = /--([\w-]+)\s*:\s*([^;]+);/g;
+        let m;
+        while ((m = re.exec(css)) !== null) map.set(m[1], m[2].trim());
+        return map;
+    }
+
+    const __probe = document.createElement('div');
+    Object.assign(__probe.style, {
+        position: 'absolute',
+        width: '0',
+        height: '0',
+        overflow: 'hidden',
+        pointerEvents: 'none'
+    });
+    document.body.appendChild(__probe);
+
+    function resolveVarToRGBA(varName) {
+        __probe.style.backgroundColor = `var(--${varName})`;
+        return getComputedStyle(__probe).backgroundColor || '';
+    }
+
+    // Convert rgb/rgba string to #RRGGBB or #RRGGBBAA for display
+    function rgbaStringToHex(rgba) {
+        const m = rgba.match(/rgba?\(([^)]+)\)/i);
+        if (!m) return '';
+        const parts = m[1].split(',').map(s => s.trim());
+        const [r, g, b] = parts.slice(0, 3).map(n => Math.max(0, Math.min(255, parseInt(n, 10) || 0)));
+        let a = parts[3] !== undefined ? parseFloat(parts[3]) : 1;
+        const toHex = (n) => n.toString(16).padStart(2, '0');
+        const base = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+        if (!(a < 1)) return base;
+        return (base + toHex(Math.round(a * 255))).toUpperCase();
+    }
+
+    // ---------- Grouping ----------
+    const SHADE_RE = /-(50|100|200|300|400|500|600|700|800|900|950)$/;
+
+    function isScale(name) {
+        return SHADE_RE.test(name);
+    }
+
+    // Map a token name to a group label (and a subgroup for brand/status families)
+    function groupFor(name) {
+        // Foundations
+        if (/^color-(background|foreground|muted|muted-foreground)$/.test(name)) return ['Foundations', null];
+        if (/^color-card/.test(name)) return ['Foundations (Card)', null]; // optional if you keep --color-card
+
+        // Surfaces & Overlays & Focus
+        if (/^surface-(1|2|3|4)$/.test(name)) return ['Surfaces', null];
+        if (/^color-border(-soft|-strong)?$/.test(name)) return ['Borders', null];
+        if (/^color-ring/.test(name)) return ['Focus & Rings', null];
+        if (/^overlay-(weak|strong)$/.test(name)) return ['Overlays', null];
+
+        // Brand families
+        if (/^color-primary/.test(name)) return ['Brand', 'Primary'];
+        if (/^color-secondary/.test(name)) return ['Brand', 'Secondary'];
+        if (/^color-accent/.test(name)) return ['Brand', 'Accent'];
+        if (/^color-link/.test(name)) return ['Brand', 'Link'];
+
+        // Status families
+        if (/^color-success/.test(name)) return ['Status', 'Success'];
+        if (/^color-warning/.test(name)) return ['Status', 'Warning'];
+        if (/^color-error/.test(name)) return ['Status', 'Error'];
+        if (/^color-info/.test(name)) return ['Status', 'Info'];
+
+        return ['Other', null];
+    }
+
+    const GROUP_ORDER = [
+        ['Foundations', null],
+        ['Surfaces', null],
+        ['Borders', null],
+        ['Focus & Rings', null],
+        ['Overlays', null],
+        ['Brand', 'Primary'],
+        ['Brand', 'Secondary'],
+        ['Brand', 'Accent'],
+        ['Brand', 'Link'],
+        ['Status', 'Success'],
+        ['Status', 'Warning'],
+        ['Status', 'Error'],
+        ['Status', 'Info'],
+        ['Other', null],
+        ['Foundations (Card)', null],
+    ];
+
+    function groupKey(g, sub) {
+        return `${g}__${sub || ''}`;
+    }
+
+    // ---------- Rendering ----------
+    function tokenCard(t){
+        const hex = t.hex || t.rgba || '';
+        const doc = getTokenDoc(t.name);
+        const exHtml = (doc.ex && doc.ex.length)
+            ? `<div class="mt-1 flex flex-wrap gap-1">${doc.ex.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`
+            : '';
+
+        return `
+      <article class="token-card rounded border border-[--color-border] bg-[--surface-1] p-3" data-token-name="${t.name}">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded border border-[--color-border]" style="background:${t.rgba};"></div>
+          <div class="min-w-0">
+            <div class="font-mono text-xs sm:text-sm truncate">--${t.name}</div>
+            <div class="text-[10px] sm:text-xs text-[--color-muted-foreground] truncate">${t.raw}</div>
+          </div>
+        </div>
+
+        <div class="mt-2 flex items-center justify-between gap-2">
+          <code class="font-mono text-[10px] sm:text-xs px-1 py-0.5 rounded bg-[--surface-2]">${hex}</code>
+          <div class="flex gap-1">
+            <button class="copy-btn" data-copytype="name" data-copyval="--${t.name}">Name</button>
+            <button class="copy-btn" data-copytype="var" data-copyval="var(--${t.name})">var()</button>
+            <button class="copy-btn" data-copytype="value" data-copyval="${t.raw}">Value</button>
+          </div>
+        </div>
+
+        <div class="mt-2 token-doc">
+          ${doc.title ? `<div class="k">${doc.title}</div>` : ``}
+          <div><span class="k">Purpose:</span> ${doc.purpose}</div>
+          ${doc.usage ? `<div class="mt-1"><span class="k">Use for:</span> ${doc.usage}</div>` : ``}
+          ${exHtml}
+        </div>
+      </article>`;
+    }
+    function renderTokensGroups() {
+        const filter = ($('token-filter')?.value || '').toLowerCase();
+        const showScales = $('toggle-scales')?.checked !== false;
+        const tokens = parseTokensFromLiveCSS();
+
+        // Build item list
+        const items = [];
+        tokens.forEach((raw, name) => {
+            if (filter && !name.toLowerCase().includes(filter) && !raw.toLowerCase().includes(filter)) return;
+            const rgba = resolveVarToRGBA(name);
+            const hex = rgbaStringToHex(rgba);
+            items.push({name, raw, rgba, hex});
+        });
+
+        // Group
+        const grouped = new Map();
+        for (const it of items) {
+            const [g, sub] = groupFor(it.name);
+            const key = groupKey(g, sub);
+            if (!grouped.has(key)) grouped.set(key, {group: g, sub, items: []});
+            grouped.get(key).items.push(it);
+        }
+
+        // Sort groups + tokens
+        const orderIndex = new Map(GROUP_ORDER.map((gs, i) => [groupKey(gs[0], gs[1]), i]));
+        const sortedGroups = Array.from(grouped.values()).sort((a, b) => {
+            const ia = orderIndex.has(groupKey(a.group, a.sub)) ? orderIndex.get(groupKey(a.group, a.sub)) : 999;
+            const ib = orderIndex.has(groupKey(b.group, b.sub)) ? orderIndex.get(groupKey(b.group, b.sub)) : 999;
+            if (ia !== ib) return ia - ib;
+            if (a.group !== b.group) return a.group.localeCompare(b.group);
+            return (a.sub || '').localeCompare(b.sub || '');
+        });
+
+        const sortTokens = (a, b) => {
+            const aIsScale = isScale(a.name), bIsScale = isScale(b.name);
+            if (aIsScale !== bIsScale) return aIsScale ? 1 : -1; // base first
+            // shades ascending
+            const ma = a.name.match(SHADE_RE), mb = b.name.match(SHADE_RE);
+            if (ma && mb) return parseInt(ma[1], 10) - parseInt(mb[1], 10);
+            return a.name.localeCompare(b.name);
+        };
+
+        const container = $('tokens-groups');
+        let totalShown = 0;
+        container.innerHTML = sortedGroups.map(({group, sub, items}) => {
+            const base = items.filter(i => !isScale(i.name)).sort(sortTokens);
+            const scales = items.filter(i => isScale(i.name)).sort(sortTokens);
+            const shown = showScales ? base.concat(scales) : base;
+            totalShown += shown.length;
+
+            const title = sub ? `${group} · ${sub}` : group;
+            const badge =
+                `<span class="ml-2 text-xs px-1.5 py-0.5 rounded bg-[--surface-2]">${shown.length}</span>` +
+                (!showScales && scales.length ? `<span class="ml-1 text-xs text-[--color-muted-foreground]">(+${scales.length} hidden)</span>` : '');
+
+            return `
+        <details class="token-group rounded border border-[--color-border] bg-[--surface-1]" open>
+          <summary class="group-summary cursor-pointer select-none px-3 py-2 flex items-center justify-between">
+            <div class="font-semibold">${title}${badge}</div>
+            <div class="flex items-center gap-2">
+              <button class="copy-btn copy-group" data-group="${title}">Copy names</button>
+            </div>
+          </summary>
+          <div class="px-3 pb-3">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+              ${shown.map(tokenCard).join('')}
+            </div>
+          </div>
+        </details>`;
+        }).join('');
+
+        $('tokens-count').textContent = `${totalShown} tokens shown${showScales ? '' : ' (scale tokens hidden)'}`;
+    }
+
+    // ---------- Tab setup & events ----------
+    function setupTokensTab() {
+        // Switcher (unchanged, plus trigger render)
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.getAttribute('data-tab');
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    const active = b.getAttribute('data-tab') === target;
+                    b.setAttribute('aria-selected', active ? 'true' : 'false');
+                    b.classList.toggle('bg-[--surface-2]', active);
+                    b.classList.toggle('bg-[--surface-1]', !active);
+                });
+                $('tab-builder').classList.toggle('hidden', target !== 'builder');
+                $('tab-tokens').classList.toggle('hidden', target !== 'tokens');
+                if (target === 'tokens') renderTokensGroups();
             });
         });
 
-        // Copy to clipboard functionality
-        document.getElementById('copy-btn').addEventListener('click', async function () {
-            const code = document.getElementById('generated-code').textContent;
-            try {
-                await navigator.clipboard.writeText(code);
-                const btn = this;
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Copied!</span>';
-                btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                btn.classList.add('bg-green-600');
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.classList.remove('bg-green-600');
-                    btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-                }, 2000);
-            } catch (err) {
-                console.error('Failed to copy: ', err);
-                alert('Failed to copy to clipboard');
-            }
+        // Filter & toggles
+        $('token-filter')?.addEventListener('input', renderTokensGroups);
+        $('toggle-scales')?.addEventListener('change', renderTokensGroups);
+        $('expand-all')?.addEventListener('click', () => {
+            document.querySelectorAll('#tokens-groups .token-group').forEach(d => d.open = true);
+        });
+        $('collapse-all')?.addEventListener('click', () => {
+            document.querySelectorAll('#tokens-groups .token-group').forEach(d => d.open = false);
         });
 
-        // Initialize palettes and code
-        colorInputs.forEach(inputId => {
-            updateColorValue(inputId);
-            if (inputId === 'light-primary') {
-                updatePalette(inputId, 'light-primary-palette');
-            } else if (inputId === 'light-secondary') {
-                updatePalette(inputId, 'light-secondary-palette');
-            } else if (inputId === 'dark-primary') {
-                updatePalette(inputId, 'dark-primary-palette');
-            } else if (inputId === 'dark-secondary') {
-                updatePalette(inputId, 'dark-secondary-palette');
-            } else if (inputId === 'success') {
-                document.getElementById('success-single').style.backgroundColor = document.getElementById(inputId).value;
-                document.getElementById('success-single-dark').style.backgroundColor = document.getElementById(inputId).value;
-            } else if (inputId === 'warning') {
-                document.getElementById('warning-single').style.backgroundColor = document.getElementById(inputId).value;
-                document.getElementById('warning-single-dark').style.backgroundColor = document.getElementById(inputId).value;
-            } else if (inputId === 'error') {
-                document.getElementById('error-single').style.backgroundColor = document.getElementById(inputId).value;
-                document.getElementById('error-single-dark').style.backgroundColor = document.getElementById(inputId).value;
-            } else if (inputId === 'info') {
-                document.getElementById('info-single').style.backgroundColor = document.getElementById(inputId).value;
-                document.getElementById('info-single-dark').style.backgroundColor = document.getElementById(inputId).value;
+        // Copy all names
+        $('copy-token-list')?.addEventListener('click', () => {
+            const tokens = parseTokensFromLiveCSS();
+            const names = Array.from(tokens.keys()).sort().map(n => `--${n}`).join('\n');
+            copyText(names);
+        });
+
+        // Delegated events inside groups: copy per-token and per-group
+        $('tokens-groups')?.addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+
+            // Prevent <summary> toggling when clicking group buttons
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (btn.classList.contains('copy-group')) {
+                const groupEl = btn.closest('.token-group');
+                const names = Array.from(groupEl.querySelectorAll('[data-token-name]'))
+                    .map(el => `--${el.getAttribute('data-token-name')}`)
+                    .join('\n');
+                copyText(names);
+                return;
+            }
+
+            if (btn.hasAttribute('data-copytype')) {
+                const val = btn.getAttribute('data-copyval') || '';
+                copyText(val);
             }
         });
-        generateThemeCode();
-    });
+    }
+
+    // ---------- Descriptive docs for tokens ----------
+    const SCALE_RE = /-(50|100|200|300|400|500|600|700|800|900|950)$/;
+
+    const SCALE_USAGE = {
+        50: "ultra-quiet fills (hover on light UI), very soft backgrounds",
+        100: "quiet fills (chips, subtle tags), selected rows on light UI",
+        200: "soft borders / fills, subtle info blocks",
+        300: "standard borders, quiet button borders",
+        400: "tint for icons/indicators, subtle selected states",
+        500: "base color (brand tone); use cautiously for text on white",
+        600: "solid fills for buttons/chips; pair with *-foreground",
+        700: "emphasis text on tinted backgrounds; pressed/active states",
+        800: "high-contrast text or strokes on very light UI",
+        900: "strong strokes / headline accents on light UI",
+        950: "deepest strokes; rare, for highly contrasting accents"
+    };
+
+    // Ordered pattern matching; first hit wins.
+    // Each doc has: title (optional), purpose, usage, examples (array of class chips)
+    const TOKEN_DOCS = [
+        // Foundations
+        {
+            test: /^color-background$/,
+            purpose: "Default page background.",
+            usage: "Apply on <body> or top-level layout surfaces.",
+            ex: ["bg-[--color-background]", "bg-[--surface-1]"]
+        },
+        {
+            test: /^color-foreground$/,
+            purpose: "Default text color.",
+            usage: "Body copy, headings, icons.",
+            ex: ["text-[--color-foreground]", "fill-[--color-foreground]"]
+        },
+        {
+            test: /^color-muted$/,
+            purpose: "Subtle neutral background.",
+            usage: "Chips, code blocks, quiet panels/dividers.",
+            ex: ["bg-[--color-muted]"]
+        },
+        {
+            test: /^color-muted-foreground$/,
+            purpose: "Secondary/tertiary text.",
+            usage: "Help text, timestamps, placeholders.",
+            ex: ["text-[--color-muted-foreground]", "placeholder:text-[--color-muted-foreground]"]
+        },
+
+        // Surfaces & borders & focus
+        {
+            test: /^surface-1$/,
+            purpose: "Base surface.",
+            usage: "Root surface (usually same as background).",
+            ex: ["bg-[--surface-1]"]
+        },
+        {test: /^surface-2$/, purpose: "Raised surface.", usage: "Cards, panels.", ex: ["bg-[--surface-2]"]},
+        {
+            test: /^surface-3$/,
+            purpose: "Higher elevation.",
+            usage: "Popovers, menus, dropdowns.",
+            ex: ["bg-[--surface-3]"]
+        },
+        {test: /^surface-4$/, purpose: "Top elevation.", usage: "Modals, side sheets.", ex: ["bg-[--surface-4]"]},
+
+        {
+            test: /^color-border-soft$/,
+            purpose: "Low-contrast divider.",
+            usage: "List/table dividers; subtle separators.",
+            ex: ["border-[--color-border-soft]"]
+        },
+        {
+            test: /^color-border$/,
+            purpose: "Default border.",
+            usage: "Card frames, inputs, containers.",
+            ex: ["border-[--color-border]"]
+        },
+        {
+            test: /^color-border-strong$/,
+            purpose: "High-contrast border.",
+            usage: "Emphasis frames, alert outlines.",
+            ex: ["border-[--color-border-strong]"]
+        },
+
+        {
+            test: /^color-ring$/,
+            purpose: "Focus outline color.",
+            usage: "Keyboard focus styles; maintains accessibility.",
+            ex: ["focus:ring-2", "focus:ring-[--color-ring]"]
+        },
+
+        // Overlays
+        {
+            test: /^overlay-weak$/,
+            purpose: "Light scrim overlay.",
+            usage: "Behind popovers/menus.",
+            ex: ["bg-[--overlay-weak]"]
+        },
+        {
+            test: /^overlay-strong$/,
+            purpose: "Dimmed scrim overlay.",
+            usage: "Behind modals/drawers.",
+            ex: ["bg-[--overlay-strong]"]
+        },
+
+        // Brand families
+        {
+            test: /^color-primary-foreground$/,
+            purpose: "Text/icon on primary fills.",
+            usage: "Text on primary buttons/chips.",
+            ex: ["text-[--color-primary-foreground]"]
+        },
+        {
+            test: /^color-secondary-foreground$/,
+            purpose: "Text/icon on secondary fills.",
+            usage: "Text on secondary buttons.",
+            ex: ["text-[--color-secondary-foreground]"]
+        },
+        {
+            test: /^color-accent-foreground$/,
+            purpose: "Text/icon on accent fills.",
+            usage: "Text on accent CTAs, highlights.",
+            ex: ["text-[--color-accent-foreground]"]
+        },
+
+        {
+            test: /^color-primary$/,
+            purpose: "Primary brand fill.",
+            usage: "Main CTA, key brand accents.",
+            ex: ["bg-[--color-primary]", "text-[--color-primary] (links/icons)"]
+        },
+        {
+            test: /^color-secondary$/,
+            purpose: "Secondary brand fill.",
+            usage: "Secondary actions, supporting accents.",
+            ex: ["bg-[--color-secondary]"]
+        },
+        {
+            test: /^color-accent$/,
+            purpose: "Highlight/marketing accent.",
+            usage: "Promos, special CTAs, chips.",
+            ex: ["bg-[--color-accent]"]
+        },
+
+        // Link tokens
+        {
+            test: /^color-link$/,
+            purpose: "Default link color.",
+            usage: "Inline links in text blocks.",
+            ex: ["text-[--color-link]", "underline"]
+        },
+        {
+            test: /^color-link-hover$/,
+            purpose: "Hover state for links.",
+            usage: "On interactive hover/intent.",
+            ex: ["hover:text-[--color-link-hover]"]
+        },
+        {
+            test: /^color-link-visited$/,
+            purpose: "Visited link color.",
+            usage: "When a link has been visited.",
+            ex: ["visited:text-[--color-link-visited]"]
+        },
+        {
+            test: /^color-link-foreground$/,
+            purpose: "Text on link chips/fills.",
+            usage: "If you style links as chips/badges.",
+            ex: ["text-[--color-link-foreground]"]
+        },
+
+        // Status families (foregrounds)
+        {
+            test: /^color-(success|warning|error|info)-foreground$/,
+            purpose: "Text/icon on status fills.",
+            usage: "Badges, solid pills on status-600.",
+            ex: ["text-[--color-$1-foreground]"]
+        },
+    ];
+
+    function describeScale(name) {
+        const m = name.match(SCALE_RE);
+        if (!m) return null;
+        const stop = m[1];
+        // Brand/status families
+        if (/^color-(primary|secondary|accent)-(50|100|200|300|400|500|600|700|800|900|950)$/.test(name)) {
+            return {
+                purpose: `Brand scale shade ${stop}.`,
+                usage: SCALE_USAGE[stop] || "Scale shade.",
+                ex: stop === '600'
+                    ? ["bg-[--color-primary-600] (solid buttons)","text-[--color-primary-600] (icons)"]
+                    : stop === '700'
+                        ? ["text-[--color-primary-700] (text on tinted fills)"]
+                        : ["bg-[--color-primary-"+stop+"]","border-[--color-primary-"+(stop<300?200:300)+"]"]
+            };
+        }
+        if (/^color-(success|warning|error|info)-(50|100|200|300|400|500|600|700|800|900|950)$/.test(name)) {
+            const fam = name.split('-')[1];
+            return {
+                purpose: `${fam.charAt(0).toUpperCase()+fam.slice(1)} scale shade ${stop}.`,
+                usage: SCALE_USAGE[stop] || "Scale shade.",
+                ex: stop === '100'
+                    ? [`bg-[--color-${fam}-100]`, `text-[--color-${fam}-700]`]
+                    : stop === '600'
+                        ? [`bg-[--color-${fam}-600]`, `text-[--color-${fam}-foreground]`]
+                        : [`border-[--color-${fam}-${stop}]`]
+            };
+        }
+        return null;
+    }
+
+    function getTokenDoc(name){
+        // 1) Exact/regex docs first
+        for (const d of TOKEN_DOCS) {
+            const m = name.match(d.test);
+            if (m) {
+                // allow backref replacement in examples like $1 (success|warning|...)
+                const fam = m[1];
+                const ex = (d.ex||[]).map(s => fam ? s.replaceAll('$1', fam) : s);
+                return { title: d.title, purpose:d.purpose, usage:d.usage, ex };
+            }
+        }
+        // 2) Scales
+        const scaleDoc = describeScale(name);
+        if (scaleDoc) return scaleDoc;
+
+        // 3) Fallback
+        return { purpose:"No description yet.", usage:"", ex:[] };
+    }
 </script>
 </body>
 </html>
