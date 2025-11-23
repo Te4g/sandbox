@@ -51,13 +51,26 @@
 </head>
 <body class="px-2">
 <div id="app" class="py-2">
-    <button class="btn btn-primary" @click="getPosition">
-        get position
-    </button>
-    <p>{{ latitude }}</p>
-    <p>{{ longitude }}</p>
-    <p>{{ getSpeed('m/s') }} m/s</p>
-    <p>{{ getSpeed('km/h') }} km/h</p>
+    <div class="flex">
+        <div class="flex-1 w-1/2">
+            <button class="btn btn-primary" @click="getPosition">
+                get position
+            </button>
+            <p>{{ latitude }}</p>
+            <p>{{ longitude }}</p>
+            <p>{{ getSpeed('m/s') }} m/s</p>
+            <p>{{ getSpeed('km/h') }} km/h</p>
+        </div>
+        <div class="flex-1 w-1/2 relative break-all">
+            <div class="mb-2">
+                Logs:
+                <button class="btn btn-secondary btn-xs right-0 absolute">clear logs</button>
+            </div>
+
+            <div id="logs-content"></div>
+        </div>
+    </div>
+
 
     <label for="speed">
         Speed:
@@ -91,6 +104,12 @@
             clearInterval(this.speedInterval)
         },
         methods: {
+            logs(message) {
+                document.getElementById('logs-content').innerHTML += message + '<br>'
+            },
+            clearLogs() {
+                document.getElementById('logs-content').innerHTML = ''
+            },
             getSpeed(format) {
                 switch (format) {
                     case 'm/s': return this.speed
@@ -100,13 +119,13 @@
             },
             getPosition() {
                 navigator.geolocation.watchPosition((position) => {
-                        console.log('position', position)
+                        this.logs('position:' + JSON.stringify(position))
                         this.latitude = `lat: ${position.coords.latitude}` || 'unknown latitude'
                         this.longitude = `long: ${position.coords.longitude}` || 'unknown longitude'
                         this.speed = position.coords.speed
                         this.handleMap(position.coords.latitude, position.coords.longitude)
-                    }, () => {
-                        console.log('error')
+                    }, (e) => {
+                        this.logs('error getting position:' + e)
                     },
                     {
                         enableHighAccuracy: true,
@@ -152,7 +171,7 @@
                 needle.style.transform = `rotate(-90deg)`;
 
                 speedometer.append(needle)
-            }
+            },
         }
     }).mount('#app')
 </script>
