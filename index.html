@@ -64,7 +64,7 @@
         <div class="flex-1 w-1/2 relative break-all">
             <div class="mb-2">
                 Logs:
-                <button class="btn btn-secondary btn-xs right-0 absolute">clear logs</button>
+                <button class="btn btn-secondary btn-xs right-0 absolute" @click="clearLogs">clear logs</button>
             </div>
 
             <div id="logs-content"></div>
@@ -125,7 +125,7 @@
                         this.speed = position.coords.speed
                         this.handleMap(position.coords.latitude, position.coords.longitude)
                     }, (e) => {
-                        this.logs('error getting position:' + e)
+                        this.logs('error getting position:' + e.toString())
                     },
                     {
                         enableHighAccuracy: true,
