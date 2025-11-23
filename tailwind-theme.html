@@ -81,15 +81,15 @@
             <!-- Presets -->
             <label class="text-sm text-[--color-muted-foreground]" for="preset-select">Preset</label>
             <select id="preset-select"
-                    class="rounded border px-2 py-1 bg-[--surface-1] hover:bg-[--surface-2]">
+                    class="rounded border px-2 py-1 bg-[--color-surface-1] hover:bg-[--color-surface-2]">
                 <!-- options injected via JS -->
             </select>
-            <button class="border p-2 rounded-lg hover:bg-[--surface-2]" onclick="saveCurrentAsPreset(prompt('Preset name?') || 'Custom')">Save style</button>
+            <button class="border p-2 rounded-lg hover:bg-[--color-surface-2]" onclick="saveCurrentAsPreset(prompt('Preset name?') || 'Custom')">Save style</button>
         </div>
 
         <div class="flex items-center gap-3">
             <button id="theme-toggle"
-                    class="rounded-full border px-3 py-1.5 bg-[--surface-1] hover:bg-[--surface-3] text-sm flex items-center gap-2"
+                    class="rounded-full border px-3 py-1.5 bg-[--color-surface-1] hover:bg-[--color-surface-3] text-sm flex items-center gap-2"
                     aria-pressed="false" aria-label="Toggle dark mode">
                 <span id="theme-toggle-label">Dark mode</span>
                 <span aria-hidden="true" class="kbd">⌘/</span>
@@ -100,12 +100,12 @@
     <!-- Tabs -->
     <nav class="mb-6 flex gap-2">
         <button data-tab="builder"
-                class="tab-btn rounded px-3 py-1.5 border bg-[--surface-2] text-sm"
+                class="tab-btn rounded px-3 py-1.5 border bg-[--color-surface-2] text-sm"
                 aria-selected="true">
             Builder
         </button>
         <button data-tab="tokens"
-                class="tab-btn rounded px-3 py-1.5 border bg-[--surface-1] text-sm">
+                class="tab-btn rounded px-3 py-1.5 border bg-[--color-surface-1] text-sm">
             All tokens
         </button>
     </nav>
@@ -113,7 +113,7 @@
     <div id="tab-builder">
         <!-- Live Demo -->
         <section class="mb-8">
-            <div class="rounded-lg border p-6 bg-[--surface-1] text-[--color-foreground] border-[--color-border] relative">
+            <div class="rounded-lg border p-6 bg-[--color-surface-1] text-[--color-foreground] border-[--color-border] relative">
                 <h2 class="text-2xl font-semibold mb-2">Live Theme Demo</h2>
                 <p class="text-sm mb-4 text-[--color-muted-foreground]">
                     Preview of semantic tokens: background/content, surfaces, borders, ring, and on-color text.
@@ -157,12 +157,12 @@
 
                     <!-- Card + Input + Alert -->
                     <div class="space-y-4">
-                        <div class="rounded border p-4 bg-[--surface-2] text-[--color-surface-1] border-[--color-border]">
+                        <div class="rounded border p-4 bg-[--color-surface-2] text-[--color-surface-1] border-[--color-border]">
                             <h4 class="font-semibold mb-1">Card title</h4>
                             <p class="text-sm text-[--color-muted-foreground] mb-3">
                                 Cards use surface steps and card/content tokens.
                             </p>
-                            <input class="w-full rounded px-3 py-2 bg-[--surface-1] text-[--color-foreground]
+                            <input class="w-full rounded px-3 py-2 bg-[--color-surface-1] text-[--color-foreground]
                           border border-[--color-border] focus:outline-none
                           focus:ring-2 focus:ring-[--color-ring]"
                                    placeholder="Input using border-[--color-border]"/>
@@ -184,7 +184,7 @@
 
         <div class="grid lg:grid-cols-2 gap-8">
             <!-- Controls -->
-            <div class="bg-[--surface-1] border rounded-lg shadow-lg p-6">
+            <div class="bg-[--color-surface-1] border rounded-lg shadow-lg p-6">
                 <h2 class="text-2xl font-semibold mb-6">Color Selection</h2>
 
                 <div class="space-y-6">
@@ -250,7 +250,7 @@
                     <!-- Dark Mode -->
                     <div>
                         <h3 class="text-lg font-medium mb-4 flex items-center">
-                            <span class="w-3 h-3 bg-[--surface-1] rounded-full mr-2"></span> Dark Mode
+                            <span class="w-3 h-3 bg-[--color-surface-1] rounded-full mr-2"></span> Dark Mode
                         </h3>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
@@ -377,7 +377,7 @@
             </div>
 
             <!-- Palette + Contrast -->
-            <div class="bg-[--surface-1] border rounded-lg shadow-lg p-6">
+            <div class="bg-[--color-surface-1] border rounded-lg shadow-lg p-6">
                 <h2 class="text-2xl font-semibold mb-6">Palette & Contrast Preview</h2>
 
                 <div class="space-y-6">
@@ -419,7 +419,7 @@
                     <!-- Dark palettes -->
                     <div>
                         <h3 class="text-lg font-medium mb-4">Dark Mode</h3>
-                        <div class="bg-[--surface-1] p-4 rounded-lg">
+                        <div class="bg-[--color-surface-1] p-4 rounded-lg">
                             <div class="grid grid-cols-7 gap-2">
                                 <div>
                                     <div class="text-xs font-medium text-[--color-muted-foreground] mb-1">Primary</div>
@@ -468,7 +468,7 @@
         </div>
 
         <!-- Color Usage Guide (expanded) -->
-        <section class="mt-8 bg-[--surface-1] border rounded-lg shadow-lg p-6 space-y-8">
+        <section class="mt-8 bg-[--color-surface-1] border rounded-lg shadow-lg p-6 space-y-8">
             <header>
                 <h2 class="text-2xl font-semibold mb-1">When to use each color class</h2>
                 <p class="text-sm text-[--color-muted-foreground]">
@@ -494,14 +494,14 @@
                         <tbody>
                         <tr class="border-b border-[--color-border]">
                             <td class="py-2 px-3">Page base</td>
-                            <td class="py-2 px-3">bg-[--surface-1]</td>
+                            <td class="py-2 px-3">bg-[--color-surface-1]</td>
                             <td class="py-2 px-3">text-[--color-foreground]</td>
                             <td class="py-2 px-3">border-[--color-border-soft] (dividers)</td>
                             <td class="py-2 px-3">—</td>
                         </tr>
                         <tr class="border-b border-[--color-border]">
                             <td class="py-2 px-3">Card / Panel</td>
-                            <td class="py-2 px-3">bg-[--surface-2]</td>
+                            <td class="py-2 px-3">bg-[--color-surface-2]</td>
                             <td class="py-2 px-3">text-[--color-surface-1] (or text-[--color-foreground])</td>
                             <td class="py-2 px-3">border-[--color-border]</td>
                             <td class="py-2 px-3">focus:ring-[--color-ring]</td>
@@ -545,7 +545,7 @@
                         </tr>
                         <tr class="border-b border-[--color-border]">
                             <td class="py-2 px-3">Input / Field</td>
-                            <td class="py-2 px-3">bg-[--surface-1]</td>
+                            <td class="py-2 px-3">bg-[--color-surface-1]</td>
                             <td class="py-2 px-3">text-[--color-foreground]
                                 placeholder:text-[--color-muted-foreground]
                             </td>
@@ -573,13 +573,13 @@
 
             <!-- 1. Foundations -->
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                     <h3 class="font-semibold mb-2">Foundations: backgrounds & text</h3>
                     <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
-                        <li><strong>Base</strong>: <code>bg-[--surface-1] text-[--color-foreground]</code> on <code>&lt;body></code>.
+                        <li><strong>Base</strong>: <code>bg-[--color-surface-1] text-[--color-foreground]</code> on <code>&lt;body></code>.
                         </li>
-                        <li><strong>Elevations</strong>: <code>bg-[--surface-2]</code>, <code>bg-[--surface-3]</code>,
-                            <code>bg-[--surface-4]</code> (cards, popovers, modals).
+                        <li><strong>Elevations</strong>: <code>bg-[--color-surface-2]</code>, <code>bg-[--color-surface-3]</code>,
+                            <code>bg-[--color-surface-4]</code> (cards, popovers, modals).
                         </li>
                         <li><strong>Muted text</strong>: <code>text-[--color-muted-foreground]</code> for secondary info
                             (timestamps, helpers).
@@ -589,7 +589,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                     <h3 class="font-semibold mb-2">Don’t fight the theme</h3>
                     <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
                         <li>Avoid Tailwind grays (<code>text-gray-*</code>, <code>bg-gray-*</code>)—use tokens so dark
@@ -604,7 +604,7 @@
 
             <!-- 2. Brand actions -->
             <div class="grid md:grid-cols-3 gap-6">
-                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                     <h3 class="font-semibold mb-2">Primary action</h3>
                     <p class="text-sm text-[--color-muted-foreground] mb-3">Main CTA or key brand moments.</p>
                     <button class="px-3 py-2 rounded bg-[--color-primary] text-[--color-primary-foreground] focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
@@ -613,7 +613,7 @@
                     <p class="mt-3 text-xs text-[--color-muted-foreground]">Quiet variant: <code>bg-[--color-primary-50]
                         text-[--color-primary-700] border border-[--color-primary-200]</code></p>
                 </div>
-                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                     <h3 class="font-semibold mb-2">Secondary action</h3>
                     <p class="text-sm text-[--color-muted-foreground] mb-3">A secondary CTA that’s available but not
                         dominant.</p>
@@ -621,7 +621,7 @@
                         Secondary
                     </button>
                 </div>
-                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                     <h3 class="font-semibold mb-2">Accent & Links</h3>
                     <p class="text-sm text-[--color-muted-foreground] mb-3">
                         Accent draws attention (promos, highlights). Links are inline text navigation.
@@ -636,33 +636,33 @@
 
             <!-- 3. Inputs & focus -->
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                     <h3 class="font-semibold mb-2">Inputs</h3>
                     <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
-                        <li>Use <code>border-[--color-border]</code> + <code>bg-[--surface-1]</code> + <code>text-[--color-foreground]</code>.
+                        <li>Use <code>border-[--color-border]</code> + <code>bg-[--color-surface-1]</code> + <code>text-[--color-foreground]</code>.
                         </li>
                         <li>Focus with <code>focus:ring-2 focus:ring-[--color-ring]</code>; on small controls use <code>--color-ring</code>.
                         </li>
                         <li>Placeholder: <code>placeholder:text-[--color-muted-foreground]</code>.</li>
                     </ul>
-                    <input class="mt-3 w-full rounded px-3 py-2 bg-[--surface-1] text-[--color-foreground] placeholder:text-[--color-muted-foreground] border border-[--color-border] focus:outline-none focus:ring-2 focus:ring-[--color-ring]"
+                    <input class="mt-3 w-full rounded px-3 py-2 bg-[--color-surface-1] text-[--color-foreground] placeholder:text-[--color-muted-foreground] border border-[--color-border] focus:outline-none focus:ring-2 focus:ring-[--color-ring]"
                            placeholder="Search..."/>
                 </div>
-                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                     <h3 class="font-semibold mb-2">Overlays & elevation</h3>
                     <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
-                        <li>Popover: <code>bg-[--surface-3]</code>; Modal: <code>bg-[--surface-4]</code> + page scrim
-                            <code>bg-[--overlay-strong]</code>.
+                        <li>Popover: <code>bg-[--color-surface-3]</code>; Modal: <code>bg-[--color-surface-4]</code> + page scrim
+                            <code>bg-[--color-overlay-strong]</code>.
                         </li>
                         <li>Dividers inside panels: <code>border-[--color-border-soft]</code>.</li>
                     </ul>
-                    <div class="mt-3 p-3 rounded border border-[--color-border] bg-[--surface-3]">Popover example</div>
+                    <div class="mt-3 p-3 rounded border border-[--color-border] bg-[--color-surface-3]">Popover example</div>
                 </div>
             </div>
 
             <!-- 4. Status feedback -->
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                     <h3 class="font-semibold mb-2">Banners</h3>
                     <p class="text-sm text-[--color-muted-foreground] mb-3">Use a subtle background + strong text.</p>
                     <div class="space-y-2">
@@ -680,7 +680,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+                <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                     <h3 class="font-semibold mb-2">Badges / pills</h3>
                     <p class="text-sm text-[--color-muted-foreground] mb-3">Use the strong fill with correct on-color
                         text.</p>
@@ -694,7 +694,7 @@
             </div>
 
             <!-- 5. Borders -->
-            <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+            <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                 <h3 class="font-semibold mb-2">Borders (which strength?)</h3>
                 <ul class="list-disc pl-5 text-sm space-y-1 text-[--color-muted-foreground]">
                     <li><strong>Soft</strong> (<code>border-[--color-border-soft]</code>): list dividers, table rows.
@@ -712,7 +712,7 @@
             </div>
 
             <!-- 6. Recipes you can reuse -->
-            <div class="rounded border p-4 border-[--color-border] bg-[--surface-1]">
+            <div class="rounded border p-4 border-[--color-border] bg-[--color-surface-1]">
                 <h3 class="font-semibold mb-2">Reusable recipes (copy/paste)</h3>
                 <div class="grid md:grid-cols-2 gap-4 text-sm">
                     <div>
@@ -734,7 +734,7 @@
                     <div>
                         <p class="text-[--color-muted-foreground] mb-2">Input</p>
                         <code class="block bg-[--color-muted] p-2 rounded">
-                            class="w-full rounded px-3 py-2 bg-[--surface-1] text-[--color-foreground]
+                            class="w-full rounded px-3 py-2 bg-[--color-surface-1] text-[--color-foreground]
                             placeholder:text-[--color-muted-foreground] border border-[--color-border]
                             focus:outline-none focus:ring-2 focus:ring-[--color-ring]"
                         </code>
@@ -742,7 +742,7 @@
                     <div>
                         <p class="text-[--color-muted-foreground] mb-2">Card</p>
                         <code class="block bg-[--color-muted] p-2 rounded">
-                            class="rounded border border-[--color-border] bg-[--surface-2] p-4"
+                            class="rounded border border-[--color-border] bg-[--color-surface-2] p-4"
                         </code>
                     </div>
                 </div>
@@ -750,7 +750,7 @@
         </section>
 
         <!-- Generated code -->
-        <div class="mt-8 bg-[--surface-1] border rounded-lg shadow-lg p-6 space-y-4">
+        <div class="mt-8 bg-[--color-surface-1] border rounded-lg shadow-lg p-6 space-y-4">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-semibold">Generated Tailwind v4 Theme (@theme)</h2>
                 <div class="flex items-center gap-2">
@@ -758,13 +758,13 @@
                             class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm">Copy
                     </button>
                     <button id="download-theme"
-                            class="bg-[--surface-1] hover:bg-[--surface-3] text-white px-3 py-1.5 rounded-lg text-sm">
+                            class="bg-[--color-surface-1] hover:bg-[--color-surface-3] text-white px-3 py-1.5 rounded-lg text-sm">
                         Download CSS
                     </button>
                 </div>
             </div>
             <pre id="generated-code"
-                 class="bg-[--surface-1] text-green-400 p-4 rounded-lg overflow-x-auto text-sm"></pre>
+                 class="bg-[--color-surface-1] text-green-400 p-4 rounded-lg overflow-x-auto text-sm"></pre>
 
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-semibold">Live CSS Variables (for the preview)</h2>
@@ -773,12 +773,12 @@
                 </button>
             </div>
             <pre id="live-css-code"
-                 class="bg-[--surface-1] text-green-400 p-4 rounded-lg overflow-x-auto text-sm"></pre>
+                 class="bg-[--color-surface-1] text-green-400 p-4 rounded-lg overflow-x-auto text-sm"></pre>
         </div>
     </div>
 
     <!-- TOKENS TAB -->
-    <section id="tab-tokens" class="hidden bg-[--surface-1] border rounded-lg shadow-lg p-6">
+    <section id="tab-tokens" class="hidden bg-[--color-surface-1] border rounded-lg shadow-lg p-6">
         <header class="flex items-center justify-between gap-3 mb-4">
             <div>
                 <h2 class="text-2xl font-semibold">All color tokens</h2>
@@ -787,14 +787,14 @@
             </div>
             <div class="flex items-center gap-2">
                 <input id="token-filter" type="search" placeholder="Filter by name or value…"
-                       class="w-64 max-w-[60vw] rounded px-3 py-1.5 bg-[--surface-1] text-[--color-foreground] border border-[--color-border] focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
+                       class="w-64 max-w-[60vw] rounded px-3 py-1.5 bg-[--color-surface-1] text-[--color-foreground] border border-[--color-border] focus:outline-none focus:ring-2 focus:ring-[--color-ring]">
                 <label class="text-xs flex items-center gap-2 ml-2">
                     <input id="toggle-scales" type="checkbox" class="rounded" checked> Show scale tokens (50–950)
                 </label>
-                <button id="expand-all" class="rounded px-3 py-1.5 border bg-[--surface-2] text-sm">Expand all</button>
-                <button id="collapse-all" class="rounded px-3 py-1.5 border bg-[--surface-1] text-sm">Collapse all
+                <button id="expand-all" class="rounded px-3 py-1.5 border bg-[--color-surface-2] text-sm">Expand all</button>
+                <button id="collapse-all" class="rounded px-3 py-1.5 border bg-[--color-surface-1] text-sm">Collapse all
                 </button>
-                <button id="copy-token-list" class="rounded px-3 py-1.5 border bg-[--surface-2] text-sm">Copy all
+                <button id="copy-token-list" class="rounded px-3 py-1.5 border bg-[--color-surface-2] text-sm">Copy all
                     names
                 </button>
             </div>
@@ -1100,14 +1100,14 @@ ${lines('info', infoScale)}
 
   /* States & focus */
   --color-ring: ${primaryScaleL[600].oklch};
-  --overlay-weak: oklch(0 0 0 / 0.20);
-  --overlay-strong: oklch(0 0 0 / 0.40);
+  --color-overlay-weak: oklch(0 0 0 / 0.20);
+  --color-overlay-strong: oklch(0 0 0 / 0.40);
 
   /* Surfaces (light) */
-  --surface-1: var(--color-background);
-  --surface-2: color-mix(in oklch, var(--color-background), black 3%);
-  --surface-3: color-mix(in oklch, var(--color-background), black 6%);
-  --surface-4: color-mix(in oklch, var(--color-background), black 9%);
+  --color-surface-1: var(--color-background);
+  --color-surface-2: color-mix(in oklch, var(--color-background), black 3%);
+  --color-surface-3: color-mix(in oklch, var(--color-background), black 6%);
+  --color-surface-4: color-mix(in oklch, var(--color-background), black 9%);
 }
 :root { color-scheme: light; }
 
@@ -1156,14 +1156,14 @@ ${lines('info', infoScale)}
 
   /* States & focus */
   --color-ring: ${primaryScaleD[400].oklch};
-  --overlay-weak: oklch(1 0 0 / 0.15);
-  --overlay-strong: oklch(1 0 0 / 0.30);
+  --color-overlay-weak: oklch(1 0 0 / 0.15);
+  --color-overlay-strong: oklch(1 0 0 / 0.30);
 
   /* Surfaces (dark) */
-  --surface-1: var(--color-background);
-  --surface-2: color-mix(in oklch, var(--color-background), white 4%);
-  --surface-3: color-mix(in oklch, var(--color-background), white 7%);
-  --surface-4: color-mix(in oklch, var(--color-background), white 10%);
+  --color-surface-1: var(--color-background);
+  --color-surface-2: color-mix(in oklch, var(--color-background), white 4%);
+  --color-surface-3: color-mix(in oklch, var(--color-background), white 7%);
+  --color-surface-4: color-mix(in oklch, var(--color-background), white 10%);
 }
 
 :root[data-theme="dark"] { color-scheme: dark; }`;
@@ -1217,15 +1217,15 @@ ${lines('info', infoScale)}
             const ratio = contrastRatio(fg, bg);
             const passAA = ratio >= 4.5 ? 'AA' : (ratio >= 3 ? 'AA Large' : '—');
             const passAAA = ratio >= 7 ? 'AAA' : '—';
-            const chip = `<span class="inline-block px-2 py-0.5 rounded bg-[--surface-3]">${ratio.toFixed(2)}:1</span>`;
+            const chip = `<span class="inline-block px-2 py-0.5 rounded bg-[--color-surface-3]">${ratio.toFixed(2)}:1</span>`;
             return `
               <tr class="border-b last:border-0">
                 <td class="py-2 pr-4">${label}</td>
                 <td class="py-2 pr-4">${chip}</td>
                 <td class="py-2 pr-4">
                   <span class="inline-flex gap-2">
-                    <span class="px-2 py-0.5 rounded ${passAA !== '—' ? 'bg-green-100 text-green-800' : 'bg-[--surface-3] text-[--color-foreground]'}">${passAA}</span>
-                    <span class="px-2 py-0.5 rounded ${passAAA !== '—' ? 'bg-green-100 text-green-800' : 'bg-[--surface-3] text-[--color-foreground]'}">${passAAA}</span>
+                    <span class="px-2 py-0.5 rounded ${passAA !== '—' ? 'bg-green-100 text-green-800' : 'bg-[--color-surface-3] text-[--color-foreground]'}">${passAA}</span>
+                    <span class="px-2 py-0.5 rounded ${passAAA !== '—' ? 'bg-green-100 text-green-800' : 'bg-[--color-surface-3] text-[--color-foreground]'}">${passAAA}</span>
                   </span>
                 </td>
                 <td class="py-2">
@@ -1336,7 +1336,7 @@ ${lines('info', infoScale)}
     function toast(msg) {
         const t = document.createElement('div');
         t.textContent = msg;
-        t.className = 'fixed bottom-4 right-4 bg-[--surface-1] text-white text-sm px-3 py-1.5 rounded shadow';
+        t.className = 'fixed bottom-4 right-4 bg-[--color-surface-1] text-white text-sm px-3 py-1.5 rounded shadow';
         document.body.appendChild(t);
         setTimeout(() => t.remove(), 1500);
     }
@@ -1550,7 +1550,7 @@ ${lines('info', infoScale)}
             : '';
 
         return `
-      <article class="token-card rounded border border-[--color-border] bg-[--surface-1] p-3" data-token-name="${t.name}">
+      <article class="token-card rounded border border-[--color-border] bg-[--color-surface-1] p-3" data-token-name="${t.name}">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded border border-[--color-border]" style="background:${t.rgba};"></div>
           <div class="min-w-0">
@@ -1560,7 +1560,7 @@ ${lines('info', infoScale)}
         </div>
 
         <div class="mt-2 flex items-center justify-between gap-2">
-          <code class="font-mono text-[10px] sm:text-xs px-1 py-0.5 rounded bg-[--surface-2]">${hex}</code>
+          <code class="font-mono text-[10px] sm:text-xs px-1 py-0.5 rounded bg-[--color-surface-2]">${hex}</code>
           <div class="flex gap-1">
             <button class="copy-btn" data-copytype="name" data-copyval="--${t.name}">Name</button>
             <button class="copy-btn" data-copytype="var" data-copyval="var(--${t.name})">var()</button>
@@ -1628,11 +1628,11 @@ ${lines('info', infoScale)}
 
             const title = sub ? `${group} · ${sub}` : group;
             const badge =
-                `<span class="ml-2 text-xs px-1.5 py-0.5 rounded bg-[--surface-2]">${shown.length}</span>` +
+                `<span class="ml-2 text-xs px-1.5 py-0.5 rounded bg-[--color-surface-2]">${shown.length}</span>` +
                 (!showScales && scales.length ? `<span class="ml-1 text-xs text-[--color-muted-foreground]">(+${scales.length} hidden)</span>` : '');
 
             return `
-        <details class="token-group rounded border border-[--color-border] bg-[--surface-1]" open>
+        <details class="token-group rounded border border-[--color-border] bg-[--color-surface-1]" open>
           <summary class="group-summary cursor-pointer select-none px-3 py-2 flex items-center justify-between">
             <div class="font-semibold">${title}${badge}</div>
             <div class="flex items-center gap-2">
@@ -1659,8 +1659,8 @@ ${lines('info', infoScale)}
                 document.querySelectorAll('.tab-btn').forEach(b => {
                     const active = b.getAttribute('data-tab') === target;
                     b.setAttribute('aria-selected', active ? 'true' : 'false');
-                    b.classList.toggle('bg-[--surface-2]', active);
-                    b.classList.toggle('bg-[--surface-1]', !active);
+                    b.classList.toggle('bg-[--color-surface-2]', active);
+                    b.classList.toggle('bg-[--color-surface-1]', !active);
                 });
                 $('tab-builder').classList.toggle('hidden', target !== 'builder');
                 $('tab-tokens').classList.toggle('hidden', target !== 'tokens');
@@ -1735,7 +1735,7 @@ ${lines('info', infoScale)}
             test: /^color-background$/,
             purpose: "Default page background.",
             usage: "Apply on <body> or top-level layout surfaces.",
-            ex: ["bg-[--color-background]", "bg-[--surface-1]"]
+            ex: ["bg-[--color-background]", "bg-[--color-surface-1]"]
         },
         {
             test: /^color-foreground$/,
@@ -1761,16 +1761,16 @@ ${lines('info', infoScale)}
             test: /^surface-1$/,
             purpose: "Base surface.",
             usage: "Root surface (usually same as background).",
-            ex: ["bg-[--surface-1]"]
+            ex: ["bg-[--color-surface-1]"]
         },
-        {test: /^surface-2$/, purpose: "Raised surface.", usage: "Cards, panels.", ex: ["bg-[--surface-2]"]},
+        {test: /^surface-2$/, purpose: "Raised surface.", usage: "Cards, panels.", ex: ["bg-[--color-surface-2]"]},
         {
             test: /^surface-3$/,
             purpose: "Higher elevation.",
             usage: "Popovers, menus, dropdowns.",
-            ex: ["bg-[--surface-3]"]
+            ex: ["bg-[--color-surface-3]"]
         },
-        {test: /^surface-4$/, purpose: "Top elevation.", usage: "Modals, side sheets.", ex: ["bg-[--surface-4]"]},
+        {test: /^surface-4$/, purpose: "Top elevation.", usage: "Modals, side sheets.", ex: ["bg-[--color-surface-4]"]},
 
         {
             test: /^color-border-soft$/,
@@ -1803,13 +1803,13 @@ ${lines('info', infoScale)}
             test: /^overlay-weak$/,
             purpose: "Light scrim overlay.",
             usage: "Behind popovers/menus.",
-            ex: ["bg-[--overlay-weak]"]
+            ex: ["bg-[--color-overlay-weak]"]
         },
         {
             test: /^overlay-strong$/,
             purpose: "Dimmed scrim overlay.",
             usage: "Behind modals/drawers.",
-            ex: ["bg-[--overlay-strong]"]
+            ex: ["bg-[--color-overlay-strong]"]
         },
 
         // Brand families
