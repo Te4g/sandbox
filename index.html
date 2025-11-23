@@ -105,7 +105,14 @@
         },
         methods: {
             logs(message) {
-                document.getElementById('logs-content').innerHTML += message + '<br>'
+                let div = document.createElement('div')
+                div.innerHTML = message
+
+                let existingLogsNumber = document.querySelectorAll('#logs-content > div').length
+                if (existingLogsNumber >= 5) {
+                    this.clearLogs()
+                }
+                document.getElementById('logs-content').appendChild(div)
             },
             clearLogs() {
                 document.getElementById('logs-content').innerHTML = ''
