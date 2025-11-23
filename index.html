@@ -125,7 +125,7 @@
                         this.speed = position.coords.speed
                         this.handleMap(position.coords.latitude, position.coords.longitude)
                     }, (e) => {
-                        this.logs('error getting position:' + e.toString())
+                        this.logs('error getting position:' + e.message)
                     },
                     {
                         enableHighAccuracy: true,
